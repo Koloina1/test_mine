@@ -1,0 +1,319 @@
+<!-- <?php //echo $this->layout()->content; ?> -->
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <title>Observatoire</title>
+
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <link rel="stylesheet" href="../../public/bootstrap/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="../../public/dist/css/AdminLTE.min.css">
+
+  <link rel="stylesheet" href="../../public/dist/css/skins/_all-skins.min.css">
+
+  <link rel="stylesheet" href="../../public/bootstrap/css/jquery.dataTables.min.css">
+
+  <link rel="stylesheet" href="../../public/bootstrap/css/scroller.dataTables.min.css">
+  
+  <link rel="stylesheet" href="../../public/plugins/jqueryui/jquery-ui.css">
+
+  <link rel="stylesheet" href="../../public/plugins/datepicker/bootstrap-datetimepicker.min.css">
+
+  <link rel="stylesheet" href="../../public/plugins/chosen/docsupport/style.css">
+
+  <link rel="stylesheet" href="../../public/plugins/chosen/docsupport/prism.css">
+
+  <link rel="stylesheet" href="../../public/plugins/chosen/chosen.css">
+
+  <script src="../../public/plugins/jQuery/jQuery-2.2.0.min.js"></script>
+
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+
+  <script src="../../public/plugins/jqueryui/jquery-ui.js"></script>
+
+  <!-- <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script> -->
+
+  <script src="../../public/bootstrap/js/chart.min.js"></script>
+
+  <script src="../../public/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+  <link rel="icon" type="image/png" href="../../images/logompmp.png" />
+
+  <style type="text/css">
+
+        .notification{
+
+            z-index: 10;
+
+        }        
+
+  </style>
+
+</head>
+
+<body class="skin-green layout-boxed fixed sidebar-mini"  >
+
+<div class="wrapper">
+
+  <header class="main-header">
+
+    <a href="#" class="logo">
+
+      <span class="logo-lg"><b>MMP</b></span>
+
+    </a>
+
+    <nav class="navbar navbar-static-top">
+
+        <a href="#" class="sidebar-toggle glyphicon glyphicon-list" data-toggle="offcanvas" ></a>
+
+        <div class="navbar-custom-menu">
+
+            <ul class="nav navbar-nav">
+
+                <li class="dropdown user user-menu">
+
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+
+                      <span class="hidden-xs">Mr/Mme <b><?php echo $_SESSION['utilisateur']['nom'] . ' ' .$_SESSION['utilisateur']['prenom'] ?></b></span>
+
+                    </a>
+
+                    <ul class="dropdown-menu">
+
+                        <li class="user-body">
+
+                            <div class="list-group">
+
+                                <a href="../index/profil"><button type="button" class="list-group-item">Profil</button></a>
+
+                            </div>
+
+                        </li>
+						
+						<li class="user-body">
+
+                            <div class="list-group">
+
+                                <a href="../index/deconnexion">
+
+									<button type="button" class="list-group-item">Déconnexion</button>
+
+								</a>
+
+                            </div>
+
+                        </li>
+
+                        
+
+                    </ul>
+
+                </li>
+
+            </ul>
+
+        </div>
+
+    </nav>
+
+  </header>
+
+  <aside class="main-sidebar">
+
+    <section class="sidebar">
+
+      <ul class="sidebar-menu">
+
+        <li class="header">MENU</li>
+
+            <?php if($_SESSION['utilisateur']['role'] == "agent") : ?>
+
+                <li class="<?php echo $this->menuClass['observExpl'] ?>">
+                	<a href="../observatoire/agentview">
+                 		<i class="fa fa-list-alt"></i> <span>Liste Exploitants</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['observColl'] ?>">
+					<a href="../observatoire/listcollector">
+                  		<i class="fa fa-th-list"></i> <span>Liste collecteurs</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['operatorAgentSaisi'] ?>">
+                	<a href="../operator/agentsaisioperator">
+                  		<i class="fa fa-plus"></i> <span>Enregistrer un opérateur</span>
+                	</a>
+                </li>
+			<?php elseif($_SESSION['utilisateur']['role'] == "observc") : ?>
+
+				<li class="<?php echo $this->menuClass['communeIndex'] ?>">
+					<a href="../commune/index">
+						<i class="fa fa-dashboard"></i> <span>Tableau de bord</span>
+				  	</a>
+				</li>
+				<li class="<?php echo $this->menuClass['observExpl'] ?>">
+                	<a href="../observatoire/agentview">
+                  		<i class="fa fa-list-alt"></i> <span>Liste Exploitants</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['observColl'] ?>">
+					<a href="../observatoire/listcollector">
+                  		<i class="fa fa-th-list"></i> <span>Liste collecteurs</span>
+                	</a>
+                </li>
+			<?php elseif($_SESSION['utilisateur']['role'] == "validateurc") : ?>
+				<li class="<?php echo $this->menuClass['communeIndex'] ?>">
+					<a href="../commune/index">
+						<i class="fa fa-dashboard"></i> <span>Tableau de bord</span>
+				  	</a>
+				</li>
+				<li class="<?php echo $this->menuClass['observExpl'] ?>">
+                	<a href="../observatoire/agentview">
+                  		<i class="fa fa-list-alt"></i> <span>Liste Exploitants</span>
+                	</a>
+                </li>
+				<li class="<?php echo $this->menuClass['observColl'] ?>">
+					<a href="../observatoire/listcollector">
+                  		<i class="fa fa-list-alt"></i> <span>Liste collecteurs</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['validateIndex'] ?>">
+					<a href="../validate/index">
+                  		<i class="fa fa-th-list"></i> <span>Opérateurs en attente<br /> de validation</span>
+                	</a>
+				</li>
+				<li class="<?php echo $this->menuClass['validateData'] ?>">
+				<a href="../validate/data">
+
+                  <i class="fa fa-th-list"></i> <span>Données en attente<br /> de validation</span>
+
+                </a>
+				</li>
+
+            <?php else : ?>
+            	<li class="<?php echo $this->menuClass['boardIndex'] ?>">
+					<a href="../board/index">
+						<i class="fa fa-dashboard"></i> <span>Tableau de bord</span>
+				  	</a>
+				</li>
+				<li class="<?php echo $this->menuClass['observExpl'] ?>">
+                	<a href="../observatoire/index">
+                  		<i class="fa fa-list-alt"></i> <span>Liste Exploitants</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['observColl'] ?>">
+                	<a href="../observatoire/listcollector">
+                  		<i class="fa fa-th-list"></i> <span>Liste collecteur</span>
+                	</a>
+                </li>
+            <?php endif ?>
+
+          
+
+            <?php if($_SESSION['utilisateur']['role'] == "admin") : ?>
+            	<li class="<?php echo $this->menuClass['productIndex'] ?>">
+                	<a href="../product/index">
+                  		<i class="fa fa-plus"></i> <span>Géstion des produits</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['adminIndex'] ?>">
+                	<a href="../administrateur/index">
+                  		<i class="fa fa-user-plus"></i> <span>Géstion des utilisateurs</span>
+                	</a>
+                </li>
+                <li class="<?php echo $this->menuClass['adminListLog'] ?>">
+                	<a href="../administrateur/listlog">
+                  		<i class="fa fa-file-text-o"></i> <span>Liste des actions</span>
+                	</a>
+                </li>
+            <?php endif ?>
+        <li class="">
+
+          <a href="../index/deconnexion">
+
+            <i class="fa fa-sign-out"></i> <span>Déconnexion</span>
+
+          </a>
+
+        </li>
+
+    </section>
+
+  </aside>
+
+<div class="content-wrapper">
+
+<section class="content">
+
+  <?php echo $this->layout()->content; ?>
+
+</section>
+
+</div>
+
+  <footer class="main-footer">
+
+
+
+    <strong>Copyright &copy; 2018.</strong> Ministère des mines et du pétrole.
+
+  </footer>
+
+</div>
+
+
+
+
+
+
+
+<script src="../../plugins/jQuery/jQuery-2.2.0.min.js"></script>
+
+<script src="../../bootstrap/js/bootstrap.min.js"></script>
+
+<script src="../../dist/js/app.min.js"></script>
+
+<script src="../../dist/js/demo.js"></script>
+
+<script src="../../bootstrap/js/jquery.dataTables.min.js"></script>
+
+<script src="../../bootstrap/js/dataTables.scroller.min.js"></script>
+
+<script src="../../plugins/chosen/chosen.jquery.js"></script>
+
+<script src="../../plugins/chosen/docsupport/prism.js"></script>
+
+<script src="../../plugins/chosen/docsupport/init.js"></script>
+
+<script type="text/javascript">
+
+  $('#myModal').on('shown.bs.modal', function () {
+
+    $('.chosen-select', this).chosen('destroy').chosen();
+
+  });
+
+</script>
+
+
+
+</body>
+
+
+
+</html>
+
+

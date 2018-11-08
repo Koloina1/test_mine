@@ -1,0 +1,251 @@
+<section class="content-header">
+    <h1>Tableau de bord commune <?php echo $this->commune; ?></h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active">Tableau de bord commune <?php echo $this->commune; ?></li>
+    </ol>
+</section>
+<hr>
+<div class="row" style="">
+    <div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-aqua">
+            <div class="inner">
+            	<p>Nombre exploitants : </p>
+              	<h3><?php echo $this->countExploitant; ?> <p><?php echo $this->countExploitantPerCent; ?>%</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+        <!-- ./col -->
+    <div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-green">
+            <div class="inner">
+            	<p>Nombre collecteurs : </p>
+              	<h3><?php echo $this->countCollecteur; ?> <p><?php echo $this->countCollecteurPerCent; ?>%</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+        <!-- ./col -->
+    <div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-yellow">
+            <div class="inner">
+            	<p>Total : </p>
+              	<h3><?php echo ($this->countCollecteur + $this->countExploitant); ?><p>100%</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div> 
+	<?php if($_SESSION['utilisateur']['role'] == "validateurc") : ?>
+	<div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-red">
+            <div class="inner">
+            	<p>En attente : </p>
+              	<h3><?php echo $this->pending; ?><p>opérateur(s)</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="../validate/index" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div> 
+	<?php endif; ?>
+</div>
+<div class="row" style="">
+	<?php if(($_SESSION['utilisateur']['role'] == "validateurc") && ($this->valenq != 0)) : ?>
+	<div class="col-lg-7 col-xs-7">
+        <div class="small-box bg-red">
+            <div class="inner">
+            	<p>Données d'enquête en attende de validation : <?php echo $this->valenq; ?></p>
+            </div>
+            <a href="../validate/data" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div> 
+	<?php endif; ?>
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<h3>
+            Revenus par fokontany en Ariary commune <?php echo $this->commune; ?>
+		</h3>
+	</div>
+</div>
+<div class="row" >
+	<div class="col-md-4">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Commune <?php echo $this->commune; ?></h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieIlaka" style="height: 600px; width: 600px;" width="600" height="600"></canvas>
+            </div>
+			<div class="box-body">
+				TOTAL REVENU: <b><?php echo number_format($this->totCommune, 0, ',', '.') ?> Ar</b>
+        <br>
+		REDEVANCE : <b><?php echo number_format((0.6 * $this->totCommune) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+		RISTOURNE : <b><?php echo number_format((1.4 * $this->totCommune) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+        PERCEPTION : <b><?php echo number_format((2 * $this->totCommune) / 100, 0, ',', '.') ?> Ar</b>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-md-12">
+		<h3>
+            Répartitions des opérateurs
+		</h3>
+	</div>
+</div>
+
+<div class="row" >
+	<div class="col-md-6">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Opérateurs par classification</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieChart2" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="row" >
+	
+</div>
+
+<a href="../exel/index"><button class="btn btn-flat btn-success" disabled><i class="fa fa-download"></i> Exporter</button></a>
+
+
+<script type="text/javascript">
+	
+	var ctx2 = document.getElementById("pieChart2");
+	var myChart2 = new Chart(ctx2, {
+	    type: 'horizontalBar',
+	    data: {
+	        labels: ["Pierres précieuses", "Pierres fines","Pierres industrielles","Métaux précieux"],
+	        datasets: [{
+	            label: 'Nombre par type de mine',
+	            data: [<?php echo $this->countExploitant1; ?>, <?php echo $this->countExploitant2; ?>, <?php echo $this->countExploitant3; ?>, <?php echo $this->countExploitant4; ?>],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+        options: {
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        userCallback: function(value, index, values) {
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join('.');
+                            return  value;
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+               callbacks: {
+                  label: function(t, d) {
+                     var xLabel = t.xLabel;
+                     value = xLabel.toString();
+                     value = value.split(/(?=(?:...)*$)/);
+                     value = value.join('.');
+                     return value;
+                  }
+               }
+            }
+        },
+	});
+	
+	
+	var ctx11 = document.getElementById("pieIlaka");
+    var myChart11 = new Chart(ctx11, {
+        type: 'pie',
+        data: {
+            labels: [<?php echo $this->labelCommune ?>],
+            datasets: [{
+                label: 'Perceptions en Ariary',
+                data: [<?php echo $this->nbCommune ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(78, 23, 235, 0.5)',
+					'rgba(255, 20, 50, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+					'rgba(78, 255, 35, 0.5)',
+					'rgba(255, 255, 35, 0.5)',
+					'rgba(43, 12, 135, 0.5)',
+					'rgba(143, 70, 20, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                    var dataLabel = data.labels[tooltipItem.index];
+                    var value = data.datasets[0].data[tooltipItem.index];
+                    value = value.toString();
+                    var pattern = /(-?\d+)(\d{3})/;
+                    while (pattern.test(value))
+                    {
+                        value = value.replace(pattern, "$1.$2");
+                    }
+                    return value + ' Ar';
+                }
+              }
+            }
+        }
+		
+    });
+	
+
+	
+	
+</script>
+<style>
+.small-box h3 {
+    font-size: 24px !important;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.col-xs-6 {
+    width: 20% !important;
+}
+</style>

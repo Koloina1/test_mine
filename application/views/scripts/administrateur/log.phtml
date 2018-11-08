@@ -1,0 +1,129 @@
+<div class="col-md-12">
+	<div class="box">
+		<div class="box-header with-border">
+		  	<div class="box box-success box-solid">
+		      	<div class="box-header with-border">
+		          	<h3 class="box-title">Listes de vos activités</h3>
+		      	</div>
+		  	</div>
+		</div>
+		<div class="box-body" style="background: white">
+			<button class="btn btn-success" data-toggle="modal" data-target="#modalAction">Nouveau rapport</button>
+			<table class="table table-bordered table-striped" id="tablelogs">
+				<thead>
+					<th>Date</th>
+					<th>Nom d'utilisateur</th>
+					<th>Action</th>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+
+<!-- MODAL  -->
+<div class="modal fade" id="modalAction" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="clear_form()"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Nouveau utilisateur</h4>
+            </div>
+            <div class="modal-body"> 
+                <div class="form-group">
+                	<label>Votre action : </label>
+                	<textarea class="form-control" id="text_action"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal_action" onclick="clear_form()">Fermer</button>  
+                <button type="button" class="btn btn-primary" onclick="send_action()" id="save_btn">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ret"></div>
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+	  	load_data();
+	});
+
+	function clear_form()
+	{
+		$("#text_action").val("");
+	}
+
+	function send_action()
+	{
+		$action = $("#text_action").val();
+		if($action != "")
+		{
+			$.ajax({
+			  	url : "saveaction",
+			  	type : "post",
+			  	data : "action="+$action,
+			  	success : function($html){
+			  		$("#ret").html("");
+			  		$("#ret").html($html);
+			  		load_data();
+			  		clear_form();
+			  		$("#close_modal_action").click();
+			  	},
+			  	error : function($html){
+			  		alert('Une erreur est survenue. Veuillez reéssayer.');
+			  	}
+			});
+		}else{
+			alert('Veuillez saisisser votre formulaire.');
+		}
+	}
+
+	function load_data()
+	{
+		$.ajax({
+		  	url : "searalllog",
+		  	type : "post",
+		  	success : function($html){
+		    	console.log($html);
+		    	$dataJSON = JSON.parse( $html );
+		    	$jsonEncode = new Array();
+		    
+		    	for(var i=0;i< $dataJSON.data.length; i++){
+		        	$jsonEncode.push({
+		          		'date': $dataJSON.data[i].DATEEXPLODE,
+		          		'cleutil': $dataJSON.data[i].UTILISATEUR,
+		          		'action': $dataJSON.data[i].ACTION
+		        	})
+				}
+		    	if ( $.fn.DataTable.isDataTable('#tablelogs') ) {
+		     		$('#tablelogs').DataTable().destroy();
+		    	}
+		    	$("#div_table").show();
+		    	$("#tablelogs>tbody").html("");
+		    	$testTable = $('#tablelogs').DataTable( {
+		            "data": $jsonEncode,
+		            "scrollY": "500px",
+		            "scrollCollapse": true,
+		            "paging": false,
+		            initComplete : function() {
+		                    $("#example_filter").detach().appendTo('#new-search-area');
+		                },
+		            "oLanguage": {
+		                "sSearch": "Recheche: "
+		              },
+		            "columns": [
+		                { "data": "date" },
+		                { "data": "cleutil" },
+		                { "data": "action" },
+		            ]
+		    	});
+		  	},
+
+		    error : function($html){
+		        alert('Une erreur est survenue. Veuillez reéssayer.');
+		    }
+
+		})
+	}
+</script>

@@ -1,0 +1,134 @@
+<style type="text/css">
+	.dataTables_filter {
+	   display: none;
+	}
+</style>
+<div class="row">
+	<div class="col-md-12">
+      	<div class="box box-success box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title" id="title_search">Résultats</h3>
+            </div>
+            <div class="box-body" id="table_ajax">
+            	<div id="count"></div>
+        		<div class='table-responsive' id="div_table">
+	            	<table class="table table-bordered table-stripped" id="tableExploitant">
+	            		<thead>
+	            			<th>NOM</th>
+	            			<th>CODE EXPLOITATION</th>
+	            			<th>TYPE</th>
+	            			<th>ADRESSE</th>
+	            			<th>TELEPHONE</th>
+	            			<th>CIN</th>
+	            		</thead>
+	            		<tbody id="tbodyID">
+	            		</tbody>
+	            		
+	            	</table>
+	            </div>
+            </div>
+     	</div>
+	</div>
+</div>
+
+
+<div id="retour_ajax"></div>
+<script type="text/javascript">
+	$("#div_table").hide();
+	// oTable = $('#tableExploitant').DataTable();
+	// $('#myInputTextField').keyup(function(){
+	//       oTable.search($(this).val()).draw() ;
+	
+	// })
+	$( document ).ready(function() {
+	    load_data();
+	});
+	
+	
+	function load_data()
+	{
+		$("#title_search").html("");
+		$("#title_search").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+		$.ajax({
+			url : "searchdatabycommune",
+			type : "post",
+			success : function($html){
+				$("#btn-ajax").html("Recherche");
+				$dataJSON = JSON.parse( $html );
+				$jsonEncode = new Array();
+				for(var i=0;i< $dataJSON.data.length; i++){
+					
+				        $jsonEncode.push({
+				          'nom': $dataJSON.data[i].NOMEXPLOITANT,
+				          'codeexpl': $dataJSON.data[i].CODEEXPL,
+				          'cin': $dataJSON.data[i].NUMCIN,
+				          'addresse': $dataJSON.data[i].ADRESSE,
+				          'telephone': $dataJSON.data[i].NUMTEL,
+				          'type': $dataJSON.data[i].type,
+				          
+				        })
+				      }
+
+				if ( $.fn.DataTable.isDataTable('#tableExploitant') ) {
+				  $('#tableExploitant').DataTable().destroy();
+				}
+
+				$("#div_table").show();
+				$("#div_table>table>tbody").html("");
+
+				$testTable = $('#tableExploitant').DataTable( {
+				        "data": $jsonEncode,
+				        "scrollY": "500px",
+				        "scrollCollapse": true,
+				        "paging": false,
+				        initComplete : function() {
+				                $("#example_filter").detach().appendTo('#new-search-area');
+				            },
+				        "oLanguage": {
+				            "sSearch": "Recheche: "
+				          },
+				        "columns": [
+				            { "data": "nom" },
+				            { "data": "codeexpl" },
+				            { "data": "type" },
+				            { "data": "addresse" },
+				            { "data": "telephone" },
+				            { "data": "cin" }
+				        ]
+				} );
+				$('#myInputTextField').keyup(function(){
+				   $testTable.search( $(this).val() ).draw();
+				});
+
+				$("#title_search").html("");
+				$("#title_search").html("Tous les données");
+
+			},
+			error : function($html){
+				alert('Une erreur est survenue. Veuillez reéssayer.')
+				$("#btn-ajax").html("Recherche");
+				$("#retour_ajax").html('');
+				$("#retour_ajax").html($html);
+			}
+		})
+	}
+
+	function detail_ajax($id)
+	{
+		// $.ajax({
+		// 	url : "detailoperator",
+		// 	type : "post",
+		// 	data : "code="+$id,
+		// 	success : function($retour){
+
+		// 	},
+		// 	error : function($html){
+		// 		alert('Une erreur est survenue. Veuillez reéssayer.')
+		// 	}
+		// })
+	}
+
+</script>
+
+
+ 

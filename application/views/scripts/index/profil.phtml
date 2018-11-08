@@ -1,0 +1,134 @@
+<style type="text/css">
+    input, textarea, button { margin-top:10px }
+
+    /* Required field START */
+
+    .panel-success>.panel-heading{
+        background: #00a65a !important;
+        color: white !important;
+    }
+
+</style>
+
+<div class="col-md-4">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Profil</h3>
+        </div>
+        <div class="panel-body">           
+                
+                <div class="form-group">
+                    <label>Nom : </label>
+                    <input type="text" class="form-control" value="<?php echo $this->user[0]['NOM'].' '.$this->user[0]['PRENOM'] ?>" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Login : </label>
+                    <input type="text" class="form-control" value="<?php echo $this->user[0]['LOGIN'] ?>" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Mail : </label>
+                    <input type="text" class="form-control" value="<?php echo $this->user[0]['MAIL'] ?>" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Téléphone : </label>
+                    <input type="text" class="form-control" value="<?php echo $this->user[0]['TEL'] ?>" disabled>
+                </div>
+                <div class="form-group">
+                    <label>Rôle : </label>
+                    <input type="text" class="form-control" value="<?php echo $this->group[0]['NOMGROUP'] ?>" disabled>
+                </div>
+            
+        </div>
+    </div>
+</div>
+
+<div class="col-md-4">
+    <div class="panel panel-success">
+        <div class="panel-heading">
+            <h3 class="panel-title">Modification mot de passe</h3>
+        </div>
+        <div class="panel-body">           
+                <div id="ret_ajax"></div>
+                
+                <div class="required-field-block">
+                    
+                    <input type="password" placeholder="Votre ancien mot de passe" id="ancien" class="form-control">
+                </div>
+                
+                <div class="required-field-block">
+                    
+                    <input type="password" placeholder="Nouveau mot de passe" id="nouvau" class="form-control">
+                </div>
+
+                <div class="required-field-block">
+                    
+                    <input type="password" placeholder="Confirmer votre mot de passe" id="confirm" class="form-control">
+                </div>
+                
+                <button class="btn btn-flat btn-success" id="btn-save" onclick="ajax_confirm()">Enregistrer</button>
+            
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<script type="text/javascript">
+    
+    $("#confirm").css("border-color","#d2d6de");
+    $("#nouvau").css("border-color","#d2d6de");
+    $("#ancien").css("border-color","#d2d6de");
+
+    function ajax_confirm()
+    {
+        if($("#ancien").val() != "")
+        {
+            if($("#nouvau").val() == $("#confirm").val())
+            {
+                $("#btn-save").html("");
+                $("#btn-save").html("Enregistrement...");
+                $.ajax({
+                    url : "editpassword",
+                    method : "post",
+                    data : "ancien="+$("#ancien").val()+"&nouvau="+$("#nouvau").val(),
+                    success : function(ret){
+                        $("#ret_ajax").html("");
+                        $("#ret_ajax").html(ret);
+
+                        $("#ancien").val("");
+                        $("#confirm").val("");
+                        $("#nouvau").val("");
+
+                        $("#btn-save").html("");
+                        $("#btn-save").html("Enregistrer");
+
+                        $("#confirm").css("border-color","#d2d6de");
+                        $("#nouvau").css("border-color","#d2d6de");
+                        $("#ancien").css("border-color","#d2d6de");
+                    },
+                    error : function(err) {
+                        alert("Une erreur est survénue, Veuillez réesseyer.");
+                        $("#btn-save").html("");
+                        $("#btn-save").html("Enregistrer");
+                    }
+                })
+            }else{
+                alert("les 2 mots de passe ne sont pas identiques.");
+                $("#confirm").css("border-color","red");
+                $("#nouvau").css("border-color","red");
+
+                $("#confirm").val("");
+                $("#nouvau").val("");
+            }
+            
+        }else{
+            alert("Veuillez vérifier votre champ.");
+            $("#confirm").css("border-color","red");
+            $("#nouvau").css("border-color","red");
+            $("#ancien").css("border-color","red");
+        }
+    }
+
+</script>

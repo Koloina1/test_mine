@@ -1,0 +1,339 @@
+<style type="text/css">
+	.dataTables_filter {
+	   display: none;
+	}
+</style>
+
+<section class="content-header">
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-list-alt"></i> Observatoire</a></li>
+        <li class="active">Liste éxploitants</li>
+      </ol>
+</section>
+<br>
+<hr>
+
+<div class="box">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box-header with-border">
+			<div class="box box-success box-solid">
+			    <div class="box-header with-border">
+			        <h3 class="box-title">Recherche operateurs</h3>
+			    </div>
+			</div>
+			
+	        <div class="box-body" style="background: white">
+	        	<div class="row">
+	        		<div class="col-md-4">
+	        		</div>
+		        	<div class="col-md-4">
+		        		<div class="form-group">
+		        			<input type="text" width="195px" class="form-control" id="myInputTextField" placeholder="Recherche rapide">
+		        		</div>
+		        	</div>
+		        	<div class="col-md-4">
+		        	</div>
+		        </div>
+		        <div class="row">
+	        		<div class="col-xs-12">
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="region" onchange="select_reg()">
+	        						<option value="" selected="true">----- REGION -----</option>
+	        						<?php foreach ($this->region as $keyRegion => $valueRegion) : ?>
+	        							<option value="<?php echo $valueRegion['CODEREG'] ?>" ><?php echo $valueRegion['NOM_REG'] ?></option>
+	        						<?php endforeach ?>
+	        					</select>
+	        				</div>
+	        			</div>
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="district" onchange="select_dist()">
+	        						<option value="" selected="true">----- DISTRICT -----</option>
+	        						<!-- <?php foreach ($this->district as $keyDistrict => $valueDistrict) : ?>
+	        							<option value="<?php echo $valueDistrict['CODEDIST'] ?>" ><?php echo $valueDistrict['NOM_DIST'] ?></option>
+	        						<?php endforeach ?> -->
+	        					</select>
+	        				</div>
+	        			</div>
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="commune">
+	        						<option value="" selected="true">----- COMMUNE -----</option>
+	        						<!-- <?php foreach ($this->commune as $keyCommune => $valueCommune) : ?>
+	        							<option value="<?php echo $valueCommune['CODECOM'] ?>" ><?php echo $valueCommune['NOM_COMM'] ?></option>
+	        						<?php endforeach ?> -->
+	        					</select>
+	        				</div>
+	        			</div>
+	        			<div class="col-md-3">
+	        				<div class="col-md-10">
+	        					<button type="submit" class="btn  btn-flat btn-block" onclick="get_operator_ajax()" id="btn-ajax">Recherche</button>
+	        				</div>
+	        				<div class="col-md-2">
+	        					<a href="">
+	        						<button type="submit" class="btn"" id="btn-ajax"><span class="glyphicon glyphicon-refresh"></span></button>
+	        					</a>
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</div>    	
+	        </div>
+	        </div>
+		</div>
+	</div>
+
+</div>
+
+
+         
+<div class="row">
+	<div class="col-md-12">
+      	<div class="box box-success box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title" id="title_search">Résultats</h3>
+            </div>
+            <div class="box-body" id="table_ajax">
+            	<div id="count"></div>
+        		<div class='table-responsive' id="div_table">
+	            	<table class="table table-bordered table-stripped" id="tableExploitant">
+	            		<thead>
+	            			<th>CODE EXPLOITANT</th>
+							<th>NOM</th>
+	            			<th>TYPE</th>
+	            			<th>ADRESSE</th>
+	            			<th>TELEPHONE</th>
+	            			<th>CIN</th>
+	            		</thead>
+	            		<tbody id="tbodyID">
+	            		</tbody>
+	            		
+	            	</table>
+	            </div>
+            </div>
+     	</div>
+	</div>
+</div>
+
+
+<div id="retour_ajax"></div>
+<script type="text/javascript">
+	$("#div_table").hide();
+	
+	$( document ).ready(function() {
+	    load_data();
+	});
+	
+	function get_operator_ajax()
+	{
+		$region =  $("#region").val();
+		$district = $("#district").val();
+		$commune = $("#commune").val();
+		$fokontany =  "";
+		
+		
+		
+		$("#div_table>#tableExploitant>tbody").html("");
+		$("#btn-ajax").html("");
+		
+
+		$("#tbodyID").remove();
+		$("#tbodyID").empty();
+		$("#tbodyID").html("");
+		
+		if($region != "" || $district != "" || $commune != "")
+		{
+			$("#btn-ajax").html("...");
+			$.ajax({
+				url : "searchoperator",
+				type : "post",
+				data : "region="+$region+"&district="+$district+"&commune="+$commune+"&fokontany="+$fokontany,
+				success : function($html){
+					$("#btn-ajax").html("Recherche");
+					$dataJSON = JSON.parse( $html );
+					$jsonEncode = new Array();
+					for(var i=0;i< $dataJSON.data.length; i++){
+						
+					        $jsonEncode.push({
+					          'codeexpl': $dataJSON.data[i].CODEEXPL,
+							  'nom': $dataJSON.data[i].NOMEXPLOITANT,
+					          'cin': $dataJSON.data[i].NUMCIN,
+					          'addresse': $dataJSON.data[i].ADRESSE,
+					          'telephone': $dataJSON.data[i].NUMTEL,
+					          'type': $dataJSON.data[i].type,
+					          
+					        })
+					      }
+
+					if ( $.fn.DataTable.isDataTable('#tableExploitant') ) {
+					  $('#tableExploitant').DataTable().destroy();
+					}
+
+					$("#div_table").show();
+					$("#div_table>table>tbody").html("");
+					$("#count").html("");
+					$("#count").html(
+						"<h5>Exploitant : <span style='color:red'>"+$dataJSON.count_type_operator+"</span> || "+
+						"Collécteur : <span style='color:red'>"+$dataJSON.count_type_collector+"</span>  || "+
+						"Total : <span style='color:red'>"+$dataJSON.count+"</span></h5></br>"
+					);
+
+
+					$testTable = $('#tableExploitant').DataTable( {
+					        "data": $jsonEncode,
+					        "scrollY": "500px",
+					        "scrollCollapse": true,
+					        "paging": false,
+					        initComplete : function() {
+					                $("#example_filter").detach().appendTo('#new-search-area');
+					            },
+					        "oLanguage": {
+					            "sSearch": "Recheche: "
+					          },
+					        "columns": [
+					            { "data": "codeexpl" },
+								{ "data": "nom" },
+					            { "data": "type" },
+					            { "data": "addresse" },
+					            { "data": "telephone" },
+					            { "data": "cin" }
+					        ]
+					} );
+					$('#myInputTextField').keyup(function(){
+					   $testTable.search( $(this).val() ).draw();
+					})
+					
+
+				},
+				error : function($html){
+					alert('Une erreur est survenue. Veuillez reéssayer.')
+					$("#btn-ajax").html("Recherche");
+					$("#retour_ajax").html('');
+					$("#retour_ajax").html($html);
+				}
+			})
+		}else{
+			alert("Veuillez vérifier votre formulaire.");
+		}
+	}
+
+	function select_reg()
+	{
+		if($("#region").val() != "")
+		{
+			$.ajax({
+				url : "searchdistrictbyregion",
+				type : "post",
+				data : "code="+$("#region").val(),
+				success : function($option_html){
+
+					$("#district").html("");
+					$("#district").html($option_html);
+
+				},
+				error : function($html){
+					alert('Une erreur est survenue. Veuillez reéssayer.')
+				}
+			})
+		}
+	} 
+
+	function select_dist()
+	{
+		if($("#district").val() != "")
+		{
+			$.ajax({
+				url : "searchcommunebydistrict",
+				type : "post",
+				data : "code="+$("#district").val(),
+				success : function($option_html){
+
+					$("#commune").html("");
+					$("#commune").html($option_html);
+
+				},
+				error : function($html){
+					alert('Une erreur est survenue. Veuillez reéssayer.')
+				}
+			})
+		}
+	}
+
+	function load_data()
+	{
+		$("#title_search").html("");
+		$("#title_search").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+		$.ajax({
+			url : "searchalldata",
+			type : "post",
+			success : function($html){
+				$("#btn-ajax").html("Recherche");
+				$dataJSON = JSON.parse( $html );
+				$jsonEncode = new Array();
+				for(var i=0;i< $dataJSON.data.length; i++){
+					
+				        $jsonEncode.push({
+				          'codeexpl': $dataJSON.data[i].CODEEXPL,
+						  'nom': $dataJSON.data[i].NOMEXPLOITANT,
+				          'cin': $dataJSON.data[i].NUMCIN,
+				          'addresse': $dataJSON.data[i].ADRESSE,
+				          'telephone': $dataJSON.data[i].NUMTEL,
+				          'type': $dataJSON.data[i].type,
+				          
+				        })
+				      }
+
+				if ( $.fn.DataTable.isDataTable('#tableExploitant') ) {
+				  $('#tableExploitant').DataTable().destroy();
+				}
+
+				$("#div_table").show();
+				$("#div_table>table>tbody").html("");
+
+				$testTable = $('#tableExploitant').DataTable( {
+				        "data": $jsonEncode,
+				        "scrollY": "500px",
+				        "scrollCollapse": true,
+				        "paging": false,
+				        initComplete : function() {
+				                $("#example_filter").detach().appendTo('#new-search-area');
+				            },
+				        "oLanguage": {
+				            "sSearch": "Recheche: "
+				          },
+				        "columns": [
+							{ "data": "codeexpl" },
+				            { "data": "nom" },
+				            { "data": "type" },
+				            { "data": "addresse" },
+				            { "data": "telephone" },
+				            { "data": "cin" }
+				        ]
+				} );
+				$('#myInputTextField').keyup(function(){
+				   $testTable.search( $(this).val() ).draw();
+				});
+
+				$("#title_search").html("");
+				$("#title_search").html("Toutes les données");
+
+			},
+			error : function($html){
+				alert('Une erreur est survenue. Veuillez reéssayer.')
+				$("#btn-ajax").html("Recherche");
+				$("#retour_ajax").html('');
+				$("#retour_ajax").html($html);
+			}
+		})
+	}
+
+	function detail_ajax($id)
+	{
+		
+	}
+
+</script>
+
+
+ 

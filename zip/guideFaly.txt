@@ -1,0 +1,6 @@
+menu                       |  page                     |  Repertoire
+---------------------------|---------------------------|------------------
+tableau de board admin     |                           |  views/script/administrateur
+liste des utilisateur      | index.phtml               |  controleur: AdministrateurController
+===========================|===========================|  model: utilisateur, group, Agentcomm
+liste des agent            | adminlistagentcomm.phtml  | 

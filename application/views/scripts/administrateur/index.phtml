@@ -1,0 +1,1078 @@
+<style type="text/css">
+
+  .dataTables_filter {
+
+     display: none;
+
+  }
+
+</style>
+
+<section class="content-header">
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-user-plus"></i> Observatoire</a></li>
+        <li class="active">Géstion des utilisateurs</li>
+      </ol>
+</section>
+<br>
+<hr>
+
+
+
+
+
+<div class="box">
+
+  <div class="row">
+
+    <div class="col-md-12">
+
+      <div class="box-header with-border">
+
+        <div class="box box-success box-solid">
+
+            <div class="box-header with-border">
+
+                <h3 class="box-title">Liste des Utilisateur</h3>
+
+            </div>
+
+        </div>
+
+      </div>
+
+      <div class="box-body" style="background: white">
+
+            <div class="row">
+
+              <div class="col-md-4">
+
+              </div>
+
+              <div class="col-md-4">
+
+                <div class="form-group">
+
+                  <input type="text" width="195px" class="form-control" id="myInputTextField" placeholder="Recherche rapide">
+
+                </div>
+
+              </div>
+
+              <div class="col-md-4">
+
+              </div>
+
+            </div>
+
+            <div class="box-body" id="table_ajax">
+
+              <div id="count"></div>
+
+            <div class='table-responsive' id="div_table">
+
+                <table class="table table-bordered table-stripped" id="tableUtilisateur">
+
+                  <thead>
+
+                    <th>NOM UTILISATEUR</th>
+
+                    <th>PRENOM</th>
+
+                    <th>GROUP</th>
+
+                    <th>LOGIN</th>
+
+                    <th>MAIL</th>
+
+                    <th>TEL</th>
+
+                    <th>ETAT</th>
+
+                  </thead>
+
+                  <tbody id="tbodyIDUtilisateur">
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              <br>
+
+                <button type="button" class="btn  btn-flat " data-toggle="modal" data-target="#myModal">Nouveau Utilisateur</button>
+
+              <br>
+
+            </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- Modal update -->
+
+<div class="modal fade" id="update_user" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <h4 class="modal-title" id="myModalLabel">Modification</h4>
+
+            </div>
+
+            <div class="modal-body"> 
+
+                <input type="hidden" id="code_user">
+
+                <div class="form-group">
+
+                    <label>Nom : </label>
+
+                    <input type="text" class="form-control" name="" id="name_update">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Prénom : </label>
+
+                    <input type="text" class="form-control" name="" id="first_name_update">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Group : </label>
+
+                    <select class="form-control" onchange="select_group()" id="group_update">
+
+                        <option value="">-------</option>
+
+                        <?php foreach ($this->group as $keyGroup => $valueGroup) : ?>
+
+                            <option value="<?php echo $valueGroup['CODEGROUP'] ?>"><?php echo $valueGroup['NOMGROUP'] ?></option>
+
+                        <?php endforeach ?>
+
+                    </select>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Login : </label>
+
+                    <input type="text" class="form-control" name="" id="login_update">
+
+                </div>
+
+                <!-- <div class="form-group">
+
+                    <label>Mot de passe : </label>
+
+                    <input type="password" class="form-control" name="" id="password_update">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Confirmation du mot de passe : </label>
+
+                    <input type="password" class="form-control" name="" id="password2_update">
+
+                </div> -->
+
+                <div class="form-group">
+
+                    <label>E-mail : </label>
+
+                    <input type="mail" class="form-control" name="" id="mail_update">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Contant : </label>
+
+                    <input type="text" class="form-control" name="" id="phone_update">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Etat : </label>
+
+                    <select class="form-control" id="etat_update">
+
+                        <option value="1">Actif</option>
+
+                        <option value="0">inactif</option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal">Fermer</button>
+
+                <!-- <button type="button" class="btn btn-danger" onclick="delete_user()" id="delete_btn">Supprimer cet utilisateur</button> -->
+
+                <button type="button" class="btn btn-primary" onclick="update_data()" id="uptade_btn">Enregistrer les modifications</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- Modal insert -->
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog" role="document">
+
+        <div class="modal-content">
+
+            <div class="modal-header">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+                <h4 class="modal-title" id="myModalLabel">Nouveau utilisateur</h4>
+
+            </div>
+
+            <div class="modal-body"> 
+
+                <div class="form-group">
+
+                    <label>Nom : </label>
+
+                    <input type="text" class="form-control" name="" id="name_user">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Prénom : </label>
+
+                    <input type="text" class="form-control" name="" id="first_name_user">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Group : </label>
+
+                    <select class="form-control" onchange="select_group()" id="group_user">
+
+                        <option value="">-------</option>
+
+                        <?php foreach ($this->group as $keyGroup => $valueGroup) : ?>
+
+                            <option value="<?php echo $valueGroup['CODEGROUP'] ?>"><?php echo $valueGroup['NOMGROUP'] ?></option>
+
+                        <?php endforeach ?>
+
+                    </select>
+
+                </div>
+
+                <div id="select_agent_group">
+
+                    <div class="form-group col-md-4">
+
+                        <select class="form-control" id="region" onchange="select_reg()">
+
+                            <option value="" selected="true">----- REGION -----</option>
+
+                            <?php foreach ($this->region as $keyRegion => $valueRegion) : ?>
+
+                                <option value="<?php echo $valueRegion['CODEREG'] ?>" ><?php echo $valueRegion['NOM_REG'] ?></option>
+
+                            <?php endforeach ?>
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group col-md-4">
+
+                        <select class="form-control" id="district" onchange="select_dist()">
+
+                            <option value="" selected="true">----- DISTRICT -----</option>
+
+                            <!-- <?php foreach ($this->district as $keyDistrict => $valueDistrict) : ?>
+
+                                <option value="<?php echo $valueDistrict['CODEDIST'] ?>" ><?php echo $valueDistrict['NOM_DIST'] ?></option>
+
+                            <?php endforeach ?> -->
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group col-md-4">
+
+                        <select class="form-control" id="commune">
+
+                            <option value="" selected="true">----- COMMUNE -----</option>
+
+                            <!-- <?php foreach ($this->commune as $keyCommune => $valueCommune) : ?>
+
+                                <option value="<?php echo $valueCommune['CODECOM'] ?>" ><?php echo $valueCommune['NOM_COMM'] ?></option>
+
+                            <?php endforeach ?> -->
+
+                        </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label>CIN : </label>
+
+                        <input type="text" class="form-control" name="" id="cin_user">
+
+                    </div>
+
+                </div>
+
+                <br>
+
+                <div class="form-group">
+
+                    <label>Login : </label>
+
+                    <input type="text" class="form-control" name="" id="login_user">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Mot de passe : </label>
+
+                    <input type="password" class="form-control" name="" id="password_user">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Confirmation du mot de passe : </label>
+
+                    <input type="password" class="form-control" name="" id="password2_user">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>E-mail : </label>
+
+                    <input type="mail" class="form-control" name="" id="mail_user">
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>Contact : </label>
+
+                    <input type="text" class="form-control" name="" id="phone_user">
+
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close_modal_insert">Fermer</button>  
+
+                <button type="button" class="btn btn-primary" onclick="send_data()" id="save_btn">Enregistrer</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div id="retour_ajax"></div>
+
+
+
+<script type="text/javascript">
+
+
+
+    $("#div_table").hide();
+
+    $("#select_agent_group").hide();
+
+
+
+    $( document ).ready(function() {
+
+      load_data();
+
+    });
+
+
+
+
+
+  function load_data()
+
+  {
+
+    $("#title_search").html("");
+
+    $("#title_search").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+
+    $.ajax({
+
+      url : "searchallutilisateur",
+
+      type : "post",
+
+      success : function($html){
+
+        $("#btn-ajax").html("Recherche");
+
+        $dataJSON = JSON.parse( $html );
+
+        $jsonEncode = new Array();
+
+        
+
+        for(var i=0;i< $dataJSON.data.length; i++){
+
+            $jsonEncode.push({
+
+              'nom': $dataJSON.data[i].NOM,
+
+              'prenom': $dataJSON.data[i].PRENOM,
+
+              'group': $dataJSON.data[i].CODEGROUP,
+
+              'login': $dataJSON.data[i].LOGIN,
+
+              'mail': $dataJSON.data[i].MAIL,
+
+              'tel': $dataJSON.data[i].TEL,
+
+              'etat': $dataJSON.data[i].ETAT
+
+            })
+
+
+
+        }
+
+        if ( $.fn.DataTable.isDataTable('#tableUtilisateur') ) {
+
+          $('#tableUtilisateur').DataTable().destroy();
+
+        }
+
+        $("#div_table").show();
+
+        $("#div_table>table>tbody").html("");
+
+        $testTable = $('#tableUtilisateur').DataTable( {
+
+                "data": $jsonEncode,
+
+                "scrollY": "500px",
+
+                "scrollCollapse": true,
+
+                "paging": false,
+
+                initComplete : function() {
+
+                        $("#example_filter").detach().appendTo('#new-search-area');
+
+                    },
+
+                "oLanguage": {
+
+                    "sSearch": "Recheche: "
+
+                  },
+
+                "columns": [
+
+                    { "data": "nom" },
+
+                    { "data": "prenom" },
+
+                    { "data": "group" },
+
+                    { "data": "login" },
+
+                    { "data": "mail" },
+
+                    { "data": "tel" }, 
+
+                    { "data": "etat" },
+
+                ]
+
+        } );
+
+        $('#myInputTextField').keyup(function(){
+
+           $testTable.search( $(this).val() ).draw();
+
+        });
+
+
+
+        $("#title_search").html("");
+
+        $("#title_search").html("Toutes les données");
+
+      },
+
+
+
+        error : function($html){
+
+            alert('Une erreur est survenue. Veuillez reéssayer.');
+
+        }
+
+
+
+    })
+
+
+
+  }
+
+    function select_group()
+
+    {
+
+        if($("#group_user").val() == 4 || $("#group_user").val() == 5 || $("#group_user").val() == 6) 
+
+        {
+
+            $("#select_agent_group").show(500);
+
+        }else{
+
+            $("#select_agent_group").hide(500);
+
+        }
+
+        // $("#group_user").val();
+
+    }
+
+
+
+    function select_reg()
+
+    {
+
+        if($("#region").val() != "")
+
+        {
+
+            $.ajax({
+
+                url : "searchdistrictbyregion",
+
+                type : "post",
+
+                data : "code="+$("#region").val(),
+
+                success : function($option_html){
+
+
+
+                    $("#district").html("");
+
+                    $("#district").html($option_html);
+
+
+
+                },
+
+                error : function($html){
+
+                    alert('Une erreur est survenue. Veuillez reéssayer.')
+
+                }
+
+            })
+
+        }
+
+    } 
+
+
+
+    function select_dist()
+
+    {
+
+        if($("#district").val() != "")
+
+        {
+
+            $.ajax({
+
+                url : "searchcommunebydistrict",
+
+                type : "post",
+
+                data : "code="+$("#district").val(),
+
+                success : function($option_html){
+
+
+
+                    $("#commune").html("");
+
+                    $("#commune").html($option_html);
+
+
+
+                },
+
+                error : function($html){
+
+                    alert('Une erreur est survenue. Veuillez reéssayer.')
+
+                }
+
+            })
+
+        }
+
+    }
+
+
+
+    function security_form()
+
+    {
+
+        $valide = false;
+
+        $("#name_user").css("border-color","#d2d6de");
+
+        $("#first_name_user").css("border-color","#d2d6de");
+
+        $("#group_user").css("border-color","#d2d6de");
+
+        $("#login_user").css("border-color","#d2d6de");
+
+        $("#password_user").css("border-color","#d2d6de");
+
+        $("#password2_user").css("border-color","#d2d6de");
+
+        $("#commune").css("border-color","#d2d6de");
+
+        $("#district").css("border-color","#d2d6de");
+
+        $("#region").css("border-color","#d2d6de");
+
+        $("#cin_user").css("border-color","#d2d6de");
+
+
+
+        if($("#name_user").val() == "" || $("#first_name_user").val() == "" || $("#group_user").val() == "" || $("#login_user").val() == "" || $("#password_user").val() == "" || $("#password2_user").val() == "")
+
+        {
+
+            if($("#name_user").val() == "")
+
+            {
+
+                $("#name_user").css("border-color","red");
+
+            }
+
+            if($("#first_name_user").val() == "")
+
+            {
+
+                $("#first_name_user").css("border-color","red");
+
+            }
+
+            if($("#group_user").val() == "")
+
+            {
+
+                $("#group_user").css("border-color","red");
+
+            }
+
+            if($("#login_user").val() == "")
+
+            {
+
+                $("#login_user").css("border-color","red");
+
+            }
+
+            if($("#password_user").val() == "")
+
+            {
+
+                $("#password_user").css("border-color","red");
+
+            }
+
+            if($("#password2_user").val() == "")
+
+            {
+
+                $("#password2_user").css("border-color","red");
+
+            }
+
+        }else if($("#password_user").val() != $("#password2_user").val()){
+
+            alert("Les deux mot de passe ne sont pas identiques")
+
+            $("#password_user").css("border-color","red");
+
+            $("#password2_user").css("border-color","red");
+
+
+
+        }else if($("#group_user").val() == 4 || $("#group_user").val() == 5 || $("#group_user").val() == 6){
+
+
+
+            if($("#commune").val() == "" || $("#cin_user").val() == "")
+
+            {
+
+                if($("#commune").val() == "")
+
+                {
+
+                    $("#commune").css("border-color","red");
+
+                    $("#district").css("border-color","red");
+
+                    $("#region").css("border-color","red");
+
+                }
+
+                if($("#cin_user").val() == "")
+
+                {
+
+                    $("#cin_user").css("border-color","red");
+
+                }
+
+            }else{
+
+                $valide = true;
+
+            }
+
+        }else{
+
+            $valide = true;
+
+        }
+
+        return $valide;
+
+    }
+
+
+
+    function clean_form()
+
+    {
+
+        $("#name_user").val("");
+
+        $("#first_name_user").val("");
+
+        $("#group_user").val("");
+
+        $("#login_user").val("");
+
+        $("#password_user").val("");
+
+        $("#password2_user").val("");
+
+        $("#mail_user").val("");
+
+        $("#phone_user").val("");
+
+    }
+
+
+
+    function send_data()
+
+    {
+
+        $url = "";
+
+        $url += "nom="+$("#name_user").val();
+
+        $url += "&prenom="+$("#first_name_user").val();
+
+        $url += "&group="+$("#group_user").val();
+
+        $url += "&login="+$("#login_user").val();
+
+        $url += "&password="+$("#password_user").val();
+
+        $url += "&email="+$("#mail_user").val();
+
+        $url += "&phone="+$("#phone_user").val();
+
+
+
+        if($("#group_user").val() == 4 || $("#group_user").val() == 5 || $("#group_user").val() == 6)
+
+        {
+
+            $url += "&region="+$("#region").val();
+
+            $url += "&district="+$("#district").val();
+
+            $url += "&commune="+$("#commune").val();
+
+            $url += "&cin="+$("#cin_user").val();
+
+        }
+
+
+
+        if(security_form())
+
+        {
+
+            if(confirm("Enregistrer cet utilisateur ?"))
+
+            {
+
+                $("#save_btn").html("");
+
+                $("#save_btn").html("<i class='fa fa-refresh fa-spin'></i> Enregistrement...");
+
+                $.ajax({
+
+                    url : "insertuser",
+
+                    type : "post",
+
+                    data : $url,
+
+                    success : function($html){
+
+                        $("#close_modal_insert").click();
+
+                        $("#save_btn").html("");
+
+                        $("#save_btn").html("Enregistrer");
+
+                        clean_form();
+
+                        load_data();
+
+                        $("#select_agent_group").hide();
+
+                    },
+
+                    error : function($html){
+
+                        alert('Une erreur est survenue. Veuillez reéssayer.');
+
+                        $("#save_btn").html("");
+
+                        $("#save_btn").html("Enregistrer");
+
+                        $("#select_agent_group").hide();
+
+                    }
+
+                })
+
+            }
+
+        }
+
+    }
+
+
+
+    function detail_utilisateur($code,$nom,$prenom,$code_group,$login,$mail,$tel)
+
+    {
+
+        $("#code_user").val($code),
+
+        $("#name_update").val($nom);
+
+        $("#first_name_update").val($prenom);
+
+        $("#group_update").val($code_group);
+
+        $("#login_update").val($login);
+
+        $("#mail_update").val($mail);
+
+        $("#phone_update").val($tel);
+
+    }
+
+
+
+    function update_data()
+
+    {
+
+        $url = "";
+
+        $url += "code="+$("#code_user").val();
+
+        $url += "&nom="+$("#name_update").val();
+
+        $url += "&prenom="+$("#first_name_update").val();
+
+        $url += "&group="+$("#group_update").val();
+
+        $url += "&login="+$("#login_update").val();
+
+        $url += "&email="+$("#mail_update").val();
+
+        $url += "&phone="+$("#phone_update").val();
+
+        $url += "&etat="+$("#etat_update").val();
+
+        if(confirm("Enregistrer les modifications ? "))
+
+        {
+
+            $("#uptade_btn").html("");
+
+            $("#uptade_btn").html("<i class='fa fa-refresh fa-spin'></i> Enregistrement...");
+
+            $.ajax({
+
+                url : "updateuser",
+
+                type : "post",
+
+                data : $url,
+
+                success : function($html){
+
+                    $("#close_modal").click();
+
+                    load_data();
+
+                    $("#uptade_btn").html("");
+
+                    $("#uptade_btn").html("Enregistrer");
+
+                },
+
+                error : function($html){
+
+                    alert('Une erreur est survenue. Veuillez reéssayer.');
+
+                    $("#uptade_btn").html("");
+
+                    $("#uptade_btn").html("Enregistrer");
+
+                }
+
+            })
+
+        }
+
+    }
+
+
+
+    function delete_user()
+
+    {
+
+        $url = "";
+
+        $url += "code="+$("#code_user").val();
+
+        if(confirm("Voulez vous vraiment supprimer cet utilisateur ?"))
+
+        {
+
+            $("#delete_btn").html("");
+
+            $("#delete_btn").html("<i class='fa fa-refresh fa-spin'></i> Suppression...");
+
+            $.ajax({
+
+                url : "deleteuser",
+
+                type : "post",
+
+                data : $url,
+
+                success : function($html){
+
+                    $("#close_modal").click();
+
+                    $("#delete_btn").html("");
+
+                    $("#delete_btn").html("Supprimer");
+
+                    load_data();
+
+                },
+
+                error : function($html){
+
+                    alert('Une erreur est survenue. Veuillez reéssayer.');
+
+                    $("#delete_btn").html("");
+
+                    $("#delete_btn").html("Supprimer");
+
+                }
+
+            })
+
+        }
+
+    }
+
+
+
+</script>

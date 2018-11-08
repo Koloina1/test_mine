@@ -1,0 +1,92 @@
+<section class="content-header">
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-file-text-o"></i> Observatoire</a></li>
+        <li class="active">Liste des actions</li>
+      </ol>
+</section>
+<br>
+<hr>
+
+<div class="col-md-12">
+	<div class="box">
+		<div class="box-header with-border">
+		  	<div class="box box-success box-solid">
+		      	<div class="box-header with-border">
+		          	<h3 class="box-title">Listes de vos activités</h3>
+		      	</div>
+		  	</div>
+		</div>
+		<div class="box-body" style="background: white">
+			<table class="table table-bordered table-striped" id="tablelogs">
+				<thead>
+					<th>Date</th>
+					<th>Nom d'utilisateur</th>
+					<th>Action</th>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<div id="ret"></div>
+<script type="text/javascript">
+
+	$( document ).ready(function() {
+	  	load_data();
+	});
+
+	function clear_form()
+	{
+		$("#text_action").val("");
+	}
+
+	function load_data()
+	{
+		$.ajax({
+		  	url : "searchlog",
+		  	type : "post",
+		  	success : function($html){
+		    	console.log($html);
+		    	$dataJSON = JSON.parse( $html );
+		    	$jsonEncode = new Array();
+		    
+		    	for(var i=0;i< $dataJSON.data.length; i++){
+		        	$jsonEncode.push({
+		          		'date': $dataJSON.data[i].DATEEXPLODE,
+		          		'cleutil': $dataJSON.data[i].UTILISATEUR,
+		          		'action': $dataJSON.data[i].ACTION
+		        	})
+				}
+		    	if ( $.fn.DataTable.isDataTable('#tablelogs') ) {
+		     		$('#tablelogs').DataTable().destroy();
+		    	}
+		    	$("#div_table").show();
+		    	$("#tablelogs>tbody").html("");
+		    	$testTable = $('#tablelogs').DataTable( {
+		            "data": $jsonEncode,
+		            "scrollY": "500px",
+		            "scrollCollapse": true,
+		            "paging": false,
+		            initComplete : function() {
+		                    $("#example_filter").detach().appendTo('#new-search-area');
+		                },
+		            "oLanguage": {
+		                "sSearch": "Recheche: "
+		              },
+		            "columns": [
+		                { "data": "date" },
+		                { "data": "cleutil" },
+		                { "data": "action" },
+		            ],
+		            "order": [[ 0, "desc" ]]
+		    	});
+		  	},
+
+		    error : function($html){
+		        alert('Une erreur est survenue. Veuillez reéssayer.');
+		    }
+
+		})
+	}
+</script>

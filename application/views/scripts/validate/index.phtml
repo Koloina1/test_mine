@@ -1,0 +1,132 @@
+<style type="text/css">
+	.dataTables_filter {
+	   display: none;
+	}
+</style>
+         
+<div class="row">
+	<div class="col-md-12">
+      	<div class="box box-success box-solid">
+            <div class="box-header with-border">
+              <h3 class="box-title" id="title_search">Opérateurs en attente de validation</h3>
+            </div>
+            <div class="box-body" id="table_ajax">
+            	<div class="row">
+            		<div class="col-md-4">
+            			<div class="form-group">
+            				<input type="text" width="195px" class="form-control" id="myInputTextField" placeholder="Recherche rapide">
+            			</div>
+            		</div>
+            	</div>
+        		<div class='table-responsive' id="div_table">
+	            	<table class="table table-bordered table-stripped" id="tableExploitant">
+	            		<thead>
+							<th>CODE OPERATEUR MINIER / NIF</th>
+	            			<th>NOM</th>
+	            			<th>TYPE</th>
+	            			<th>ADRESSE</th>
+	            			<th>TELEPHONE</th>
+	            			<th>CIN</th>
+	            		</thead>
+	            		<tbody id="tbodyID">
+	            		</tbody>
+	            		
+	            	</table>
+	            </div>
+            </div>
+     	</div>
+	</div>
+</div>
+
+
+<div id="retour_ajax"></div>
+
+
+<script type="text/javascript">
+	$("#div_table").hide();
+	$("#div_tablecoll").hide();
+	// oTable = $('#tableExploitant').DataTable();
+	// $('#myInputTextField').keyup(function(){
+	//       oTable.search($(this).val()).draw() ;
+	
+	// })
+	$( document ).ready(function() {
+	    load_data();
+	});
+	
+	
+	function load_data()
+	{
+		$("#title_search").html("");
+		$("#title_search").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+		$.ajax({
+			url : "searchdatacommuneval",
+			type : "post",
+			success : function($html){
+				$("#btn-ajax").html("Recherche");
+				$dataJSON = JSON.parse( $html );
+				$jsonEncode = new Array();
+				for(var i=0;i< $dataJSON.data.length; i++){
+						if(($dataJSON.data[i].NIF == null) || ($dataJSON.data[i].NIF == "")) nif = "PAS DE NIF";
+						else nif = $dataJSON.data[i].NIF;
+						
+				        $jsonEncode.push({
+						  'codeexpl': $dataJSON.data[i].CODEEXPL + " / " + nif,
+				          'nom': $dataJSON.data[i].NOMEXPLOITANT,
+				          'cin': $dataJSON.data[i].NUMCIN,
+				          'addresse': $dataJSON.data[i].ADRESSE,
+				          'telephone': $dataJSON.data[i].NUMTEL,
+				          'type': $dataJSON.data[i].type,
+				          
+				        })
+							
+				      }
+
+				if ( $.fn.DataTable.isDataTable('#tableExploitant') ) {
+				  $('#tableExploitant').DataTable().destroy();
+				}
+
+				$("#div_table").show();
+				$("#div_table>table>tbody").html("");
+
+				$testTable = $('#tableExploitant').DataTable( {
+				        "data": $jsonEncode,
+				        "scrollY": "500px",
+				        "scrollCollapse": true,
+				        "paging": false,
+				        initComplete : function() {
+				                $("#example_filter").detach().appendTo('#new-search-area');
+				            },
+				        "oLanguage": {
+				            "sSearch": "Recheche: "
+				          },
+				        "columns": [
+				            { "data": "codeexpl" },
+							{ "data": "nom" },
+				            { "data": "type" },
+				            { "data": "addresse" },
+				            { "data": "telephone" },
+				            { "data": "cin" }
+				        ],
+				        "order": [[ 0, "desc" ]]
+				} );
+				$('#myInputTextField').keyup(function(){
+				   $testTable.search( $(this).val() ).draw();
+				});
+
+				$("#title_search").html("");
+				$("#title_search").html("Opérateurs en attente de validation");
+
+			},
+			error : function($html){
+				alert('Une erreur est survenue. Veuillez reéssayer.')
+				$("#btn-ajax").html("Recherche");
+				$("#retour_ajax").html('');
+				$("#retour_ajax").html($html);
+			}
+		})
+		
+	}
+
+
+</script>

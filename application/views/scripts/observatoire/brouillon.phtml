@@ -1,0 +1,128 @@
+<div class="box">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box-header with-border">
+			<div class="box box-success box-solid">
+			    <div class="box-header with-border">
+			        <h3 class="box-title">Liste des operateurs</h3>
+			    </div>
+			</div>
+			<
+	        <div class="box-body" style="background: white">
+	        	<div class="row">
+	        		<div class="col-xs-12">
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="region">
+	        						<option value="">----- REGION -----</option>
+	        						<?php foreach ($this->region as $keyRegion => $valueRegion) : ?>
+	        							<option value="<?php echo $valueRegion['CODEREG'] ?>" ><?php echo $valueRegion['NOM_REG'] ?></option>
+	        						<?php endforeach ?>
+	        					</select>
+	        				</div>
+	        			</div>
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="district">
+	        						<option value="">----- DISTRICT -----</option>
+	        						<?php foreach ($this->district as $keyDistrict => $valueDistrict) : ?>
+	        							<option value="<?php echo $valueDistrict['CODEDIST'] ?>" ><?php echo $valueDistrict['NOM_DIST'] ?></option>
+	        						<?php endforeach ?>
+	        					</select>
+	        				</div>
+	        			</div>
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="commune">
+	        						<option value="">----- COMMUNE -----</option>
+	        						<?php foreach ($this->commune as $keyCommune => $valueCommune) : ?>
+	        							<option value="<?php echo $valueCommune['CODECOM'] ?>" ><?php echo $valueCommune['NOM_COMM'] ?></option>
+	        						<?php endforeach ?>
+	        					</select>
+	        				</div>
+	        			</div>
+	        			<div class="col-md-3">
+	        				<div class="form-group">
+	        					<select class="form-control" id="fokontany">
+	        						<option value="">----- FOKONTANY -----</option>
+	        						<?php foreach ($this->fokontany as $keyFokontany => $valueFokontany) : ?>
+	        							<option value="<?php echo $valueFokontany['CODEFKT'] ?>" ><?php echo $valueFokontany['NOMFKT'] ?></option>
+	        						<?php endforeach ?>
+	        					</select>
+	        				</div>
+	        			</div>
+	        		</div>
+	        	</div>
+	        	
+	        	<div class="row">
+	        		<div class="col-md-4"></div>
+	        		<div class="col-md-4">
+	        			<button type="submit" class="btn  btn-flat btn-block" onclick="get_operator_ajax()">Recherche</button>
+	        		</div>
+	        		<div class="col-md-4"></div>
+	        	</div>
+	        	
+	        </div>
+	        </div>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<table class="table table-bordered table-hover table-responsive table-stripped">
+				<thead>
+					<th>OPERATEUR</th>
+					<th>REGION</th>
+					<th>DISTRICT</th>
+					<th>COMMUNE</th>
+					<th>FOKONTANY</th>
+				</thead>
+				<tbody>
+					<?php if (count($this->paginator)): ?>
+						<?php foreach ($this->paginator as $item): ?>
+							<tr>
+								<td><?php echo $item['NOMEXPLOITANT'] ?></td>
+								<td><?php echo $item['region'] ?></td>
+								<td><?php echo $item['district'] ?></td>
+								<td><?php echo $item['commune'] ?></td>
+								<td><?php echo $item['fokontany'] ?></td>
+							</tr>
+						<?php endforeach; ?>
+					<?php endif; ?>
+				</tbody>
+				<?php //echo $this->paginationControl($this->paginator,'Sliding', 'my_pagination_control.phtml'); ?> 
+			</table>
+			
+		</div>
+	</div>
+</div>
+
+<div id="retour_ajax"></div>
+<script type="text/javascript">
+	
+	function get_operator_ajax()
+	{
+		$region =  $("#region").val();
+		$district = $("#district").val();
+		$commune = $("#commune").val();
+		$fokontany =  $("#fokontany").val();
+		$.ajax({
+			url : "searchoperator",
+			type : "post",
+			data : "region="+$region+"&district="+$district+"&commune="+$commune+"&fokontany="+$fokontany,
+			success : function($html){
+				$("#retour_ajax").html('');
+				$("#retour_ajax").html($html);
+			},
+			error : function($html){
+				$("#retour_ajax").html('');
+				$("#retour_ajax").html($html);
+			}
+		})
+		// alert($region + " " +$district + " " + $commune + " " + $fokontany);
+	} 
+
+</script>
+
+
+ 

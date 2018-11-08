@@ -1,0 +1,441 @@
+<style type="text/css">
+	
+	.autocomplete {
+	  /*the container must be positioned relative:*/
+	  position: relative;
+	  display: inline-block;
+
+	}
+
+	.autocomplete-items {
+	  position: absolute;
+	  border: 1px solid #d4d4d4;
+	  border-bottom: none;
+	  border-top: none;
+	  z-index: 99;
+	  /*position the autocomplete items to be the same width as the container:*/
+	  top: 100%;
+	  left: 0;
+	  right: 0;
+	}
+	.autocomplete-items div {
+	  padding: 10px;
+	  cursor: pointer;
+	  background-color: #fff; 
+	  border-bottom: 1px solid #d4d4d4; 
+	}
+	.autocomplete-items div:hover {
+	  /*when hovering an item:*/
+	  background-color: #e9e9e9; 
+	}
+	.autocomplete-active {
+	  /*when navigating through the items using the arrow keys:*/
+	  background-color: DodgerBlue !important; 
+	  color: #ffffff; 
+	}
+	#tags{
+		width: 530px !important;
+	}
+
+</style>
+<a href="javascript:history.back()">Retour</a>
+<?php if(!empty($this->operator)) : ?>
+    <div class="row">
+    		<div id="retour_ajax"></div>
+            <div class="box">
+                <div class="col-md-2">
+                    Operateur Nom :
+                      <div class="form-group">
+                            <input type="text" class="form-control" id="operateurs" disabled="true"  value="<?php echo $this->operator[0]['NOMEXPLOITANT'] ?>"/>
+                      </div>
+                </div>
+
+                <div class="col-md-2">
+                    Operateur type :
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="type" disabled="true" value="<?php echo $this->operator[0]['type'] ?>"/>
+                    </div>
+
+                </div>
+                <div class="col-md-2">
+                    Région :
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="fokontany" disabled="true" value="<?php echo $this->operator[0]['region'] ?>"/>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    District :
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="fokontany" disabled="true" value="<?php echo $this->operator[0]['district'] ?>"/>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    Commune :
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="fokontany" disabled="true" value="<?php echo $this->operator[0]['commune'] ?>"/>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    Fokontany :
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="fokontany" disabled="true" value="<?php echo $this->operator[0]['fokontany'] ?>"/>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <!--MODAL -->
+        <!-- <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        Ajout
+        </button> -->
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="close_modal()" ><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Ajout enquête</h4>
+                    </div>
+                <div class="modal-body"> 
+                    <div id="form-modal">
+                    	<div class="form-group ui-widget">
+                    	    <label>Karazany (Type)</label>
+                    	    <select class="chosen-select" id="CODPRODT" onchange="selectProduct(this.value)">
+                    	    	<option value="0">--------</option>
+                    	    	<option value="1" data-detail="Pierre précieuses">Pierre précieuses</option>
+                    	    	<option value="2" data-detail="Pierres Fines">Pierres Fines</option>
+                    	    	<option value="3" data-detail="Pierres industrielles">Pierres industrielles</option>
+                    	    	<option value="4" data-detail="Métaux précieux">Métaux précieux</option>
+                    	    </select>
+                    	</div>
+                        <div class="form-group autocomplete">
+                            <label>Vokatra (Produit)</label>
+                            <select class="form-control chosen-select" id="PRODCLASS">
+                            	<option>------</option>
+                            </select>
+                        </div>                       
+                        <div class="form-group">
+                            <label>Lanjany (Quantité tout en Gr)</label>
+                            <input type="number" id='C10B' class="form-control" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Vidiny ambany indrindra (Valeur min-C11A)</label>
+                            <input type="number" id='C11A' class="form-control" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Vidiny ambony indrindra (Valeur max-C11B)</label>
+                            <input type="number" id='C11B' class="form-control" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Vola maty rehetra(Valeur vendue-C12)</label>
+                            <input type="number" id='C12' class="form-control" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Fokontany</label>
+                            <select class="form-control" id="FKT">
+                                <option value="">------</option>
+                                <?php foreach ($this->fktAgent as $keyFkt => $valueFkt) : ?>
+                                    <option value="<?php echo $valueFkt['CODEFKT'] ?>" data-name="<?php echo $valueFkt['NOMFKT'] ?>"><?php echo $valueFkt['NOMFKT'] ?></option>
+                                <?php endforeach ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div id="cofirm-form">
+                        <table class="table table-responsive table-striped table-bordered">
+                            <thead>
+                                <th>Signification</th>
+                                <th>Valeur</th>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Karazany (Type)</td>
+                                    <td id="type_confirm"></td>
+                                </tr>
+                                <tr>
+                                    <td>Vokatra (Produit)</td>
+                                    <td id="produit_cofirm"></td>
+                                </tr>
+                                <tr>
+                                    <td>Lanjany (Quantité tout en Gr)</td>
+                                    <td id="qtt_confirm"></td>
+                                </tr>
+                                <tr>
+                                    <td>Vidiny ambany indrindra (Valeur min-C11A)</td>
+                                    <td id="val_min_confirm"></td>
+                                </tr>
+                                <tr>
+                                    <td>Vidiny ambony indrindra (Valeur max-C11B)</td>
+                                    <td id="val_max_confirm"></td>
+                                </tr>
+                                <tr>
+                                    <td>Vola maty rehetra(Valeur vendue-C12)</td>
+                                    <td id="val_vendue_confirm"></td>
+                                </tr>
+                                <tr>
+                                    <td>Fokontany</td>
+                                    <td id="fkt_confirm"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+						Efa voamarina daholo ve ireo voalaza etsy ambony ireo? <br />
+						<input type="radio" id="confirm" value="ok" name="confirm">Eny</input> <input type="radio" name="confirm" checked>Tsia</input>
+                    </div>
+                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal" onclick="close_modal()" id="close_modal">Akatona</button>
+                        <button type="button" class="btn btn-primary"  id="btn_save_row" onclick="confirm_form()">Tahirizina (Enregistrer)</button>
+                        <button type="button" class="btn btn-default"  id="prec_modal" onclick="prec_form()">Hiverina (Précédent)</button>
+                        <button type="button" class="btn btn-success"  id="btn_confirm_row" onclick="confirm_data()">
+                        <span id="load_icon"><i class="fa fa-refresh fa-spin"></i></span>
+                        <span id="label_confirm">Hamarinina ary alefa (Confirmer)</span>
+                        </button> 
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--MODAL -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-success box-solid">
+                    <div class="box-header with-border">
+                      <h3 class="box-title">Enquête exploitation</h3>
+                    </div>
+                    <div class="box-body">
+                    <?php if($_SESSION['utilisateur']['role'] == "agent") : ?>
+                        <button class="btn btn-danger" id="btn_add_row" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#myModal">Hampiditra (Ajouter)</button>
+                    <?php endif ?>
+                        <hr>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-stripped">
+                                <thead style="background:#00a65a;color:white">
+                                    <th>Produit</th>
+                                    <th>Type</th>
+                                    <th>Quantité tot en gr (C10B)</th>
+                                    <th>Valeur Min(C11A)</th>
+                                    <th>Valeur Max (C11B)</th>
+                                    <th>Valeur vendue (C12)</th>
+                                    <th>Fokontany</th>
+                                    <th>Date</th>
+                                </thead>
+                                <tbody id="tableOperator">
+                                   <?php echo $this->tableOperator ?>
+                                </tbody>              
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <script type="text/javascript">
+ 
+        $("#cofirm-form").hide();
+        $("#btn_confirm_row").hide();
+        $("#prec_modal").hide();
+        $("#load_icon").hide();
+
+        function selectProduct($e)
+        {
+        	if($e != "0")
+        	{
+        		$optionHTML = "";
+        		$.ajax({
+        			url: 'selectproduct',
+        			type: 'post',
+        			data: "codeClasse="+$e,
+        			success : function($retour)
+        			{
+        				
+        				jsonDataProduct = $.parseJSON($retour);
+        				console.log(jsonDataProduct);
+        				$optionHTML += "<option>-------</option>";
+        				$.each(jsonDataProduct, function(i, item) {
+        				    
+        				    $optionHTML += "<option value='"+item.CODPRODT+"'>"+item.DESIGNATION+"</option>";
+
+        				});
+        				$("#PRODCLASS").html("");
+        				$("#PRODCLASS").append($optionHTML);
+        				$('#PRODCLASS').trigger("chosen:updated");
+        			},
+        			error : function(error)
+        			{
+        				console.log(error);
+        			}
+        		});
+        		
+        	}
+        }
+        
+        function add_row_table()
+        {
+            $("#btn_add_row").attr("disabled",true);
+            $("#btn_save_row").attr("disabled",false);
+            $html = "";
+            $html += "<tr id='rowadd'>";
+            $html += '<td><select id="CODPRODT" style="width:100%" onchange="update_CLASS()"><option value=""> - - </option><?php 
+                echo $this->productOb->getOptionsSelect();
+            ?></select></td>';
+            $html += "<td><input type='text' id='PRODCLASS' readonly style='width:100%'></td>";
+            $html += "<td><input type='number' id='C10B' style='width:100%'></td>";
+            $html += "<td><input type='number' id='C11A' style='width:100%'></td>";
+            $html += "<td><input type='number' id='C11B' style='width:100%'></td>";
+            $html += "<td><input type='number' id='C12' style='width:100%'></td>";
+            $html += "</tr>";
+            $("#tableOperator").append($html);
+
+        }
+        
+        function update_CLASS(){
+            var proToClasse = <?php echo json_encode($this->proToClasse); ?>;
+            var toNomClasse = { 1 : "Pierre précieuses (1)",2 : "Pierres Fines (2)",3 : "Pierres industrielles (3)",4 : "Métaux précieux (4)" }
+            $("#PRODCLASS").val(toNomClasse[proToClasse[$("#CODPRODT").val()]]);
+        }
+
+        function security_form()
+        {
+            $valide = false;
+            $("#C10B").css("border-color","#d2d6de");
+            $("#C11A").css("border-color","#d2d6de");
+            $("#C11B").css("border-color","#d2d6de");
+            $("#C12").css("border-color","#d2d6de");
+            $("#CODPRODT").css("border-color","#d2d6de");
+            $("#FKT").css("border-color","#d2d6de");
+
+            if($("#CODPRODT").val() == "" || $("#C10B").val() == "" || $("#C12").val() == "")
+            {
+                if($("#CODPRODT").val() == "")
+                {
+                    $("#CODPRODT").css("border-color","red");
+                }
+                if($("#C10B").val() == "")
+                {
+                    $("#C10B").css("border-color","red");
+                }
+                if($("#C12").val() == "")
+                {
+                    $("#C12").css("border-color","red");
+                }
+                if($("#FKT").val() == "")
+                {
+                    $("#FKT").css("border-color","red");
+                }
+            }else{
+                $valide = true;
+            }
+            return $valide;
+        }
+        function confirm_form()
+        {
+            if(security_form())
+            {
+                $("#form-modal").hide();
+                $("#cofirm-form").show();
+                $("#btn_save_row").hide();
+
+                $("#btn_confirm_row").show();
+                $("#prec_modal").show();
+
+                $("#produit_cofirm").html($("#PRODCLASS").val());
+                $("#type_confirm").html($("#CODPRODT").find(':selected').data('detail'));//PRODCLASS
+                $("#qtt_confirm").html($("#C10B").val());
+                $("#val_min_confirm").html($("#C11A").val());
+                $("#val_max_confirm").html($("#C11B").val());
+                $("#val_vendue_confirm").html($("#C12").val());
+                $("#fkt_confirm").html($("#FKT").find(':selected').data("name"));
+            }
+            
+        }
+
+        function prec_form()
+        {
+            $("#cofirm-form").hide();
+            $("#form-modal").show();
+            $("#btn_confirm_row").hide();
+            $("#prec_modal").hide();
+            $("#btn_save_row").show();
+        }
+
+        function close_modal()
+        {
+            $("#CODPRODT").val();
+            $("#PRODCLASS").val("");
+            $("#prec_modal").hide();
+            $("#btn_save_row").show();
+            $("#C10B").val("");
+            $("#C11A").val("");
+            $("#C11B").val("");
+            $("#C12").val("");
+            $("#cofirm-form").hide();
+            $("#form-modal").show();
+            $("#btn_confirm_row").hide();
+        }
+        
+        function save_row_table()
+        {
+            $("#load_icon").show();
+            $("#label_confirm").hide();
+            $.ajax({
+                    url : "savenewenquete",
+                    type : "post",
+                    data : "LASTITEM=<?php $lastEntry = end($this->operator);
+                    echo $lastEntry['CODEQUEST']; ?>&CODPRODT="+ $("#PRODCLASS").val() +"&C10B="+ $("#C10B").val() +"&C11A="+ $("#C11A").val() +"&C11B="+ $("#C11B").val() +"&C12="+ $("#C12").val()+"&CODEFKT="+$("#FKT").val(),
+                    success : function(ret){
+                        d = new Date(Date.now()).toLocaleString();
+                        strhtml = "<tr>";
+                        strhtml += "<td>" + $("#PRODCLASS").val() + "</td>";
+                        strhtml += "<td>" + $("#CODPRODT option:selected").text() + "</td>";    
+                        strhtml += "<td>" + $("#C10B").val() + "</td>";
+                        strhtml += "<td>" + $("#C11A").val()  + "</td>";
+                        strhtml += "<td>" + $("#C11B").val()  + "</td>";
+                        strhtml += "<td>" + $("#C12").val()  + "</td>";
+                        strhtml += "<td>" + $("#FKT").find(':selected').data("name")  + "</td>";
+                        strhtml += "<td>" + d  + "</td>";
+                        strhtml += "</tr>";
+                        $("#btn_add_row").attr("disabled",false);
+                        $("#btn_save_row").attr("disabled",false);
+                        $("#rowadd").remove();
+                        $("#tableOperator").append(strhtml);
+                        $("#close_modal").click();
+                        $("#retour_ajax").html("");
+                        $("#retour_ajax").html(ret);
+                        
+                    },
+                    error: function(err){
+                        alert("Enregistrement échouée");
+                    }
+                    
+            });
+        }
+        function confirm_data()
+        {
+
+             if(
+
+                $("#confirm").is(":checked") 
+
+            ){
+                save_row_table();
+            }else{
+
+                 alert("Hamarino daholo ireo zavatra nampidirinao ary safidio ny eny raha hanamafy na tsindrio ny hiverina raha misy fanitsiana hatao.");
+            
+            }
+
+        }
+     
+    </script>
+    <script type="text/javascript">
+    	
+    </script>
+
+<?php else : ?>
+    <div class="alert alert-danger alert-dismissible">
+        <h4><i class="icon fa fa-ban"></i> Message!</h4>
+        Données non validées pour cette opérateur.
+    </div>
+<?php endif ?>
+    
+

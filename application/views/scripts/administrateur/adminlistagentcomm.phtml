@@ -1,0 +1,257 @@
+<style type="text/css">
+
+  .dataTables_filter {
+
+     display: none;
+
+  }
+
+</style>
+
+
+
+<div class="box">
+
+  <div class="row">
+
+    <div class="col-md-12">
+
+      <div class="box-header with-border">
+
+        <div class="box box-success box-solid">
+
+            <div class="box-header with-border">
+
+                <h3 class="box-title">Liste Agent Communal</h3>
+
+            </div>
+
+        </div>
+
+      </div>
+      <div class="box-body" style="background: white">
+
+            <div class="row">
+
+              <div class="col-md-4">
+
+              </div>
+
+              <div class="col-md-4">
+
+                <div class="form-group">
+
+                  <input type="text" width="195px" class="form-control" id="myInputTextField" placeholder="Recherche rapide">
+
+                </div>
+
+              </div>
+
+              <div class="col-md-4">
+
+              </div>
+
+            </div>
+            <div class="box-body" id="table_ajax">
+
+              <div id="count"></div>
+
+            <div class='table-responsive' id="div_table">
+
+                <table class="table table-bordered table-stripped" id="tableAgent">
+
+                  <thead>
+
+                    <th>NOM AGENT</th>
+
+                    <th>COMMUNE</th>
+
+                    <th>DISTRICT</th>
+
+                    <th>REGION</th>
+
+                  </thead>
+
+                  <tbody id="tbodyIDAgent">
+
+                  </tbody>
+
+                </table>
+
+              </div>
+               <br>
+              <button type="button" class="btn  btn-flat " onclick="document.location.href='../administrateur/adminsaisiagentcomm'">Nouveau Agent</button>
+              <br>
+
+            </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+<div id="retour_ajax"></div>
+
+<script type="text/javascript">
+
+  $("#div_table").hide();
+
+  
+  $( document ).ready(function() {
+
+      load_data();
+
+  });
+
+
+  function load_data()
+
+  {
+
+    $("#title_search").html("");
+
+    $("#title_search").html("<div class='overlay'><i class='fa fa-refresh fa-spin'></i></div>");
+
+    $.ajax({
+
+      url : "searchalldata",
+
+      type : "post",
+
+      success : function($html){
+
+        $("#btn-ajax").html("Recherche");
+
+        $dataJSON = JSON.parse( $html );
+
+
+        $jsonEncode = new Array();
+
+        for(var i=0;i< $dataJSON.data.length; i++){
+
+          
+
+                $jsonEncode.push({
+
+                  'nom': $dataJSON.data[i].NOMAGCOM,
+
+                  'commune': $dataJSON.data[i].NOM_COMM,
+
+                  'district': $dataJSON.data[i].NOM_DIST,
+
+                  'region': $dataJSON.data[i].NOM_REG,
+
+                  
+
+                })
+
+              }
+
+              console.log($jsonEncode);
+
+        if ( $.fn.DataTable.isDataTable('#tableAgent') ) {
+
+          $('#tableAgent').DataTable().destroy();
+
+        }
+
+
+
+        $("#div_table").show();
+
+        $("#div_table>table>tbody").html("");
+
+
+
+        $testTable = $('#tableAgent').DataTable( {
+
+                "data": $jsonEncode,
+
+                "scrollY": "500px",
+
+                "scrollCollapse": true,
+
+                "paging": false,
+
+                initComplete : function() {
+
+                        $("#example_filter").detach().appendTo('#new-search-area');
+
+                    },
+
+                "oLanguage": {
+
+                    "sSearch": "Recheche: "
+
+                  },
+
+                "columns": [
+
+                    { "data": "nom" },
+
+                    { "data": "commune" },
+
+                    { "data": "district" },
+
+                    { "data": "region" }
+
+                ]
+
+        } );
+
+        $('#myInputTextField').keyup(function(){
+
+           $testTable.search( $(this).val() ).draw();
+
+        });
+
+
+
+        $("#title_search").html("");
+
+        $("#title_search").html("Tous les données");
+
+
+
+      },
+
+      error : function($html){
+
+        alert('Une erreur est survenue. Veuillez reéssayer.')
+
+        $("#btn-ajax").html("Recherche");
+
+        $("#retour_ajax").html('');
+
+        $("#retour_ajax").html($html);
+
+      }
+
+    })
+
+  }
+
+
+
+  $("#more_com").click(function(){
+
+     
+
+    $.ajax({
+
+       url : '/administrateur/adminutilisateur' // La ressource ciblée
+
+    });
+
+   
+
+});
+
+
+
+</script>

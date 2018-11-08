@@ -1,0 +1,785 @@
+<section class="content-header">
+    <h1>Tableau de bord</h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Accueil</a></li>
+        <li class="active">Tableau de bord</li>
+    </ol>
+</section>
+<hr>
+<div class="row" style="">
+    <div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-aqua">
+            <div class="inner">
+            	<p>Nombre exploitants : </p>
+              	<h3><?php echo $this->countExploitant; ?> <p><?php echo $this->countExploitantPerCent; ?>%</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+        <!-- ./col -->
+    <div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-green">
+            <div class="inner">
+            	<p>Nombre collecteurs : </p>
+              	<h3><?php echo $this->countCollecteur; ?> <p><?php echo $this->countCollecteurPerCent; ?>%</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+        <!-- ./col -->
+    <div class="col-lg-4 col-xs-6">
+        <div class="small-box bg-yellow">
+            <div class="inner">
+            	<p>Total : </p>
+              	<h3><?php echo ($this->countCollecteur + $this->countExploitant); ?><p>100%</p></h3>
+            </div>
+            <div class="icon">
+              <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="#" class="small-box-footer"><i class="fa fa-arrow-circle-right"></i></a>
+        </div>
+    </div>   
+</div>
+<div class="row">
+	<div class="col-md-12">
+		<h3>
+            Revenus par commune en Ariary
+		</h3>
+	</div>
+</div>
+<div class="row" >
+	<div class="col-md-4">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Commune Ibity</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieIbity" style="height: 600px; width: 600px;" width="600" height="600"></canvas>
+            </div>
+			<div class="box-body">
+				TOTAL REVENU: <b><?php echo number_format($this->totIbity, 0, ',', '.') ?> Ar</b>
+        <br>
+		REDEVANCE : <b><?php echo number_format((0.6 * $this->totIbity) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+		RISTOURNE : <b><?php echo number_format((1.4 * $this->totIbity) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+        PERCEPTION : <b><?php echo number_format((2 * $this->totIbity) / 100, 0, ',', '.') ?> Ar</b>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Commune Ilaka</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieIlaka" style="height: 600px; width: 600px;" width="600" height="600"></canvas>
+            </div>
+			<div class="box-body">
+				TOTAL REVENU: <b><?php echo number_format($this->totIlaka, 0, ',', '.') ?> Ar</b>
+        <br>
+		REDEVANCE : <b><?php echo number_format((0.6 * $this->totIlaka) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+		RISTOURNE : <b><?php echo number_format((1.4 * $this->totIlaka) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+        PERCEPTION : <b><?php echo number_format((2 * $this->totIlaka) / 100, 0, ',', '.') ?> Ar</b>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Commune Maevatanana</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieMaeva" style="height: 600px; width: 600px;" width="600" height="600"></canvas>
+            </div>
+			<div class="box-body">
+				TOTAL REVENU: <b><?php echo number_format($this->totMaeva, 0, ',', '.') ?> Ar</b>
+        <br>
+		REDEVANCE : <b><?php echo number_format((0.6 * $this->totMaeva) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+		RISTOURNE : <b><?php echo number_format((1.4 * $this->totMaeva) / 100, 0, ',', '.') ?> Ar</b>
+		<br>
+        PERCEPTION : <b><?php echo number_format((2 * $this->totMaeva) / 100, 0, ',', '.') ?> Ar</b>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--div class="row" >
+	<div class="col-md-12">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Perceptions par fokontany</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="piePerFok" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+		</div>
+	</div>
+</div-->
+<div class="row">
+	<div class="col-md-12">
+		<h3>
+            Répartitions des opérateurs
+		</h3>
+	</div>
+</div>
+
+<div class="row" >
+	<!--div class="col-md-6">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Opérateurs par type</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieChart" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+		</div>
+	</div-->
+	<div class="col-md-6">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Opérateurs par classification</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieChart2" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+		</div>
+	</div>
+	<div class="col-md-6">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Opérateurs par classification par commune</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieCommOp" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="row" >
+    <!--div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Opérateurs par commune</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <canvas id="pieChartCommune" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+        </div>
+    </div-->
+	<!--div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Opérateurs par fokontany</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <canvas id="pieChartFoko" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+        </div>
+    </div-->
+	<div class="col-md-6">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Opérateurs par région</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="box-body">
+                <canvas id="pieChartRegion" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+        </div>
+    </div>
+	<div class="col-md-6">
+		<div class="box box-danger">
+            <div class="box-header with-border">
+              	<h3 class="box-title">Opérateurs par district</h3>
+              	<div class="box-tools pull-right">
+                	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              	</div>
+            </div>
+            <div class="box-body">
+              	<canvas id="pieChartDistrict" style="height: 250px; width: 600px;" width="600" height="250"></canvas>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="row" >
+	
+</div>
+
+<a href="../exel/index"><button class="btn btn-flat btn-success"><i class="fa fa-download"></i> Exporter</button></a>
+
+
+<script type="text/javascript">
+	// var ctx = document.getElementById("pieChart");
+	// var myChart = new Chart(ctx, {
+	    // type: 'bar',
+	    // data: {
+	        // labels: ["Exploitants", "Collecteurs"],
+	        // datasets: [{
+	            // label: 'Nombre par activité',
+	            // data: [<?php echo $this->countExploitant; ?>, <?php echo $this->countCollecteur; ?>],
+	            // backgroundColor: [
+	                // 'rgba(255, 99, 132, 0.2)',
+	                // 'rgba(54, 162, 235, 0.2)'
+	            // ],
+	            // borderColor: [
+	                // 'rgba(255,99,132,1)',
+	                // 'rgba(54, 162, 235, 1)'
+	            // ],
+	            // borderWidth: 1
+	        // }]
+	    // },
+	    // options: {
+            // scales: {
+                // yAxes: [{
+                    // ticks: {
+                        // beginAtZero: true,
+                        // userCallback: function(value, index, values) {
+                            // value = value.toString();
+                            // value = value.split(/(?=(?:...)*$)/);
+                            // value = value.join('.');
+                            // return  value;
+                        // }
+                    // }
+                // }]
+            // },
+            // tooltips: {
+               // callbacks: {
+                  // label: function(t, d) {
+                     // var yLabel = t.yLabel;
+                     // value = yLabel.toString();
+                     // value = value.split(/(?=(?:...)*$)/);
+                     // value = value.join('.');
+                     //if line chart
+                     // return value;
+                  // }
+               // }
+            // }
+        // },
+	// });
+	var ctx2 = document.getElementById("pieChart2");
+	var myChart2 = new Chart(ctx2, {
+	    type: 'horizontalBar',
+	    data: {
+	        labels: ["Pierres précieuses", "Pierres fines","Pierres industrielles","Métaux précieux"],
+	        datasets: [{
+	            label: 'Nombre par type de mine',
+	            data: [<?php echo $this->countExploitant1; ?>, <?php echo $this->countExploitant2; ?>, <?php echo $this->countExploitant3; ?>, <?php echo $this->countExploitant4; ?>],
+	            backgroundColor: [
+	                'rgba(255, 99, 132, 0.2)',
+	                'rgba(54, 162, 235, 0.2)'
+	            ],
+	            borderColor: [
+	                'rgba(255,99,132,1)',
+	                'rgba(54, 162, 235, 1)'
+	            ],
+	            borderWidth: 1
+	        }]
+	    },
+        options: {
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        userCallback: function(value, index, values) {
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join('.');
+                            return  value;
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+               callbacks: {
+                  label: function(t, d) {
+                     var xLabel = t.xLabel;
+                     value = xLabel.toString();
+                     value = value.split(/(?=(?:...)*$)/);
+                     value = value.join('.');
+                     return value;
+                  }
+               }
+            }
+        },
+	});
+	
+	// var ctx3 = document.getElementById("pieChartCommune");
+	// var myChart3 = new Chart(ctx3, {
+	    // type: 'pie',
+	    // data: {
+	        // labels: [<?php echo $this->labelCommunes ?>],
+	        // datasets: [{
+	            // label: 'Nombre d\'opérateurs par commune',
+	            // data: [<?php echo $this->nbCommunes ?>],
+	            // backgroundColor: [
+	                // 'rgba(255, 99, 132, 0.2)',
+	                // 'rgba(54, 162, 235, 0.2)'
+	            // ],
+	            // borderColor: [
+	                // 'rgba(255,99,132,1)',
+	                // 'rgba(54, 162, 235, 1)'
+	            // ],
+	            // borderWidth: 1
+	        // }]
+	    // },
+	// });
+
+    var ctx4 = document.getElementById("pieChartRegion");
+    var myChart4 = new Chart(ctx4, {
+        type: 'horizontalBar',
+        data: {
+            labels: [<?php echo $this->labelRegion ?>],
+            datasets: [{
+                label: 'Nombre d\'opérateurs par region',
+                data: [<?php echo $this->nbRegion ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(78, 23, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        userCallback: function(value, index, values) {
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join('.');
+                            return  value;
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+               callbacks: {
+                  label: function(t, d) {
+                     var xLabel = t.xLabel;
+                     value = xLabel.toString();
+                     value = value.split(/(?=(?:...)*$)/);
+                     value = value.join('.');
+                     return value;
+                  }
+               }
+            }
+        },
+    });
+
+    var ctx5 = document.getElementById("pieChartDistrict");
+    var myChart5 = new Chart(ctx5, {
+        type: 'bar',
+        data: {
+            labels: [<?php echo $this->labelDistrict ?>],
+            datasets: [{
+                label: 'Nombre d\'opérateurs par district',
+                data: [<?php echo $this->nbDistrict ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(78, 23, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        userCallback: function(value, index, values) {
+                            value = value.toString();
+                            value = value.split(/(?=(?:...)*$)/);
+                            value = value.join('.');
+                            return  value;
+                        }
+                    }
+                }]
+            },
+            tooltips: {
+               callbacks: {
+                  label: function(t, d) {
+                     var yLabel = t.yLabel;
+                     value = yLabel.toString();
+                     value = value.split(/(?=(?:...)*$)/);
+                     value = value.join('.');
+                     // if line chart
+                     return value;
+                  }
+               }
+            }
+        },
+    });
+	
+	// var ctx8 = document.getElementById("pieChartFoko");
+    // var myChart6 = new Chart(ctx8, {
+        // type: 'horizontalBar',
+        // data: {
+            // labels: [<?php echo $this->labelFokontany ?>],
+            // datasets: [{
+                // label: 'Nombre d\'opérateurs par Fokontany',
+                // data: [<?php echo $this->nbFokontany ?>],
+                // backgroundColor: [
+                    // 'rgba(255, 99, 132, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(78, 23, 235, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                // ],
+                // borderColor: [
+                    // 'rgba(255,99,132,1)',
+                    // 'rgba(54, 162, 235, 1)'
+                // ],
+                // borderWidth: 1
+            // }]
+        // },
+        // options: {
+            // scales: {
+                // xAxes: [{
+                    // ticks: {
+                        // beginAtZero: true,
+                        // userCallback: function(value, index, values) {
+                            // value = value.toString();
+                            // value = value.split(/(?=(?:...)*$)/);
+                            // value = value.join('.');
+                            // return  value;
+                        // }
+                    // }
+                // }]
+            // }, 
+            // tooltips: {
+               // callbacks: {
+                  // label: function(t, d) {
+                     // var xLabel = t.xLabel;
+                     // value = xLabel.toString();
+                     // value = value.split(/(?=(?:...)*$)/);
+                     // value = value.join('.');
+                     // return value;
+                  // }
+               // }
+            // }
+        // },
+    // });
+	
+	// var ctx9 = document.getElementById("piePerFok");
+    // var myChart9 = new Chart(ctx9, {
+        // type: 'bar',
+        // data: {
+            // labels: [<?php echo $this->labelPerFok ?>],
+            // datasets: [{
+                // label: 'Perceptions en Ariary',
+                // data: [<?php echo $this->nbPerFok ?>],
+                // backgroundColor: [
+                    // 'rgba(255, 99, 132, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(78, 23, 235, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                    // 'rgba(54, 162, 235, 0.2)',
+                // ],
+                // borderColor: [
+                    // 'rgba(255,99,132,1)',
+                    // 'rgba(54, 162, 235, 1)'
+                // ],
+                // borderWidth: 1
+            // }]
+        // },
+    // });
+	
+	var ctx10 = document.getElementById("pieIbity");
+    var myChart10 = new Chart(ctx10, {
+        type: 'pie',
+        data: {
+            labels: [<?php echo $this->labelIbity ?>],
+            datasets: [{
+                label: 'Perceptions en Ariary',
+                data: [<?php echo $this->nbIbity ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(78, 23, 235, 0.5)',
+					'rgba(255, 20, 50, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+					'rgba(78, 255, 35, 0.5)',
+					'rgba(255, 255, 35, 0.5)',
+					'rgba(43, 12, 135, 0.5)',
+					'rgba(143, 70, 20, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }],
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                    var dataLabel = data.labels[tooltipItem.index];
+                    var value = data.datasets[0].data[tooltipItem.index];
+                    value = value.toString();
+                    var pattern = /(-?\d+)(\d{3})/;
+                    while (pattern.test(value))
+                    {
+                        value = value.replace(pattern, "$1.$2");
+                    }
+                    return value + ' Ar';
+                }
+              }
+            }
+		}
+		
+		
+    });
+	
+	var ctx11 = document.getElementById("pieIlaka");
+    var myChart11 = new Chart(ctx11, {
+        type: 'pie',
+        data: {
+            labels: [<?php echo $this->labelIlaka ?>],
+            datasets: [{
+                label: 'Perceptions en Ariary',
+                data: [<?php echo $this->nbIlaka ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(78, 23, 235, 0.5)',
+					'rgba(255, 20, 50, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+					'rgba(78, 255, 35, 0.5)',
+					'rgba(255, 255, 35, 0.5)',
+					'rgba(43, 12, 135, 0.5)',
+					'rgba(143, 70, 20, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                    var dataLabel = data.labels[tooltipItem.index];
+                    var value = data.datasets[0].data[tooltipItem.index];
+                    value = value.toString();
+                    var pattern = /(-?\d+)(\d{3})/;
+                    while (pattern.test(value))
+                    {
+                        value = value.replace(pattern, "$1.$2");
+                    }
+                    return value + ' Ar';
+                }
+              }
+            }
+        }
+		
+    });
+	
+	var ctx12 = document.getElementById("pieMaeva");
+    var myChart12 = new Chart(ctx12, {
+        type: 'pie',
+        data: {
+            labels: [<?php echo $this->labelMaeva ?>],
+            datasets: [{
+                label: 'Perceptions en Ariary',
+                data: [<?php echo $this->nbMaeva ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(78, 23, 235, 0.5)',
+					'rgba(255, 20, 50, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+					'rgba(78, 255, 35, 0.5)',
+					'rgba(255, 255, 35, 0.5)',
+					'rgba(43, 12, 135, 0.5)',
+					'rgba(143, 70, 20, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                    var dataLabel = data.labels[tooltipItem.index];
+                    var value = data.datasets[0].data[tooltipItem.index];
+                    value = value.toString();
+                    var pattern = /(-?\d+)(\d{3})/;
+                    while (pattern.test(value))
+                    {
+                        value = value.replace(pattern, "$1.$2");
+                    }
+                    return value + ' Ar';
+                }
+              }
+            }
+        }
+    });
+	
+	
+	var ctx13 = document.getElementById("pieCommOp");
+    var myChart13 = new Chart(ctx12, {
+        type: 'pie',
+        data: {
+            labels: [<?php echo $this->labelMaeva ?>],
+            datasets: [{
+                label: 'Perceptions en Ariary',
+                data: [<?php echo $this->nbMaeva ?>],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+                    'rgba(78, 23, 235, 0.5)',
+            				'rgba(255, 20, 50, 0.5)',
+                    'rgba(54, 162, 235, 0.5)',
+            				'rgba(78, 255, 35, 0.5)',
+            				'rgba(255, 255, 35, 0.5)',
+            				'rgba(43, 12, 135, 0.5)',
+            				'rgba(143, 70, 20, 0.5)',
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                    var dataLabel = data.labels[tooltipItem.index];
+                    var value = data.datasets[0].data[tooltipItem.index];
+                    value = value.toString();
+                    var pattern = /(-?\d+)(\d{3})/;
+                    while (pattern.test(value))
+                    {
+                        value = value.replace(pattern, "$1.$2");
+                    }
+                    return value + ' Ar';
+                }
+              }
+            }
+        }
+    });
+	
+	var ctx13 = document.getElementById("pieCommOp");
+    var myChart13 = new Chart(ctx13, {
+        type: 'bar',
+        data: {
+      		labels: [<?php echo $this->labelType ?>],
+      		datasets: [{
+      			label: 'Pierres précieuses : ' + <?php echo $this->totalPierre[0]  ?>,
+      			backgroundColor: 'rgba(78, 23, 235, 0.8)',
+      			data: [
+      				<?php echo $this->dataType1 ?>
+      			]
+      		}, {
+      			label: 'Pierres fines : ' + <?php echo $this->totalPierre[1]  ?>,
+      			backgroundColor: 'rgba(255, 99, 132, 0.8)' ,
+      			data: [
+      				<?php echo $this->dataType2 ?>
+      			]
+      		}, {
+      			label: 'Pierres industrielles : ' + <?php echo $this->totalPierre[2]  ?>,
+      			backgroundColor: 'rgba(255, 255, 35, 0.8)' ,
+      			data: [
+      				<?php echo $this->dataType3 ?>
+      			]
+      		}, {
+      			label: 'Métaux précieux : ' + <?php echo $this->totalPierre[3]  ?>,
+      			backgroundColor: 'rgba(143, 70, 20, 0.8)' ,
+      			data: [
+      				<?php echo $this->dataType4 ?>
+      			]
+      		}]
+        },
+        options: {
+            tooltips: {
+              callbacks: {
+                label: function(tooltipItem, data) {
+                    label = data.datasets[tooltipItem.datasetIndex].label;
+                    label_split = label.split(":");
+                    return label_split[0] + ' : ' + tooltipItem.yLabel;
+                    
+                }
+              }
+            }
+        }
+        
+    });
+</script>
+<style>
+.small-box h3 {
+    font-size: 24px !important;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    white-space: nowrap;
+    padding: 0;
+}
+
+.col-xs-6 {
+    width: 20% !important;
+}
+</style>

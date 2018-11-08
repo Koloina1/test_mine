@@ -1,0 +1,1110 @@
+<style type="text/css">
+    .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover{
+        background: #00a65a;
+        border-color: #00a65a;
+    }
+    .ui-button.ui-state-active:hover{
+        background: #dff0d8;
+        border-color: #dff0d8;
+    }
+    .ui-icon-background, .ui-state-active .ui-icon-background {
+        background: #fff;
+        border-color: #fff;
+    }
+
+    .ui-button .ui-icon{
+        background-image: url(../plugins/jqueryui/images/ui-icons_777777_256x240.png) !important;
+    }
+
+    .panel-success>.panel-heading{
+        background: #00a65a !important;
+        color: white !important;
+    }
+</style>
+<a href="javascript:history.back()">Retour</a><?php if($_SESSION['utilisateur']['role'] == "agent") : ?>
+<button type="button" class="btn btn-success pull-right" data-toggle="modal" data-backdrop="static" data-keyboard="false" data-target="#exampleModal">Ajout</button><?php endif ?>
+<br>
+<hr>
+
+
+<div class="row">
+        <div class="box">
+            <div class="col-md-3">
+                Nom :
+                  <div class="form-group">
+                        <input type="text" class="form-control" id="operateurs" disabled="true"  value="<?php echo $this->operator[0]['NOMEXPLOITANT'] ?>"/>
+                  </div>
+            </div>
+
+            <div class="col-md-3">
+                Type :
+                <div class="form-group">
+                    <input type="text" class="form-control" id="type" disabled="true" value="<?php echo ($this->operator[0]['NOMEXPLOITANT'] == 1 ?  "Exploîtant" : "Collecteur")?>"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                Numéro CIN :
+                <div class="form-group">
+                    <input type="text" class="form-control" id="type" disabled="true" value="<?php echo $this->operator[0]['NUMCIN'] ?>"/>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                Numéro Téléphone :
+                <div class="form-group">
+                    <input type="text" class="form-control" id="type" disabled="true" value="<?php echo $this->operator[0]['NUMTEL'] ?>"/>
+                </div>
+            </div>        </div>
+</div> 
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nouvelle enquête</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div id="form_enquete">
+                        <div class="col-md-12">
+                            <div class="panel panel-success ">
+                                <div class="panel-heading">ENQUETE FORMULAIRE</div>                       
+                                <div class="panel-body" style="background-color: #ddd;">
+                                    <div id="form_html">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Carte collecteur : </label>
+                                                <label class="radio-inline">
+                                                    <input type="checkbox" name="A1" id="A1" onchange="valide_carte_col(this.value)" value="1"> Oui
+                                                </label>
+												<label class="radio-inline">
+                                                    <input type="checkbox" name="A1" id="A1" onchange="valide_carte_col(this.value)" value="0" checked> Non
+                                                </label>
+                                            </div>
+                                            <div id="hideCarteCollecteur">
+                                                <div class="form-group">
+                                                    <label>Numéro carte collecteur : </label>
+                                                    <input type="number" class="form-control" id="A1A">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Lieu de délivrance : </label>
+                                                    <input type="text" class="form-control" id="A1B">
+                                                </div>
+                                            </div>
+
+                                            <!--  -->
+
+                                            <div class="form-group">
+                                                <label>Carte statistique : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="A2" id="A2" onchange="valide_stat(this.value)" value="1"> Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="A2" id="A2" onchange="valide_stat(this.value)" value="0" checked> Non
+                                                </label>
+                                            </div>
+                                            <div id="hideCarteStat">
+                                                <div class="form-group">
+                                                    <label>Numéro carte statistique : </label>
+                                                    <input type="number" class="form-control" id="A2A">
+                                                </div>
+                                            </div>
+
+                                            <!--  -->
+
+                                            <div class="form-group">
+                                                <label>Carte fiscale (CIF) : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="A3" id="A3" onchange="valide_fiscal(this.value)" value="1"> Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio" name="A3" id="A3" onchange="valide_fiscal(this.value)" value="0" checked> Non
+                                                </label>
+                                            </div>
+                                            <div id="hideCarteFiscal">
+                                                <div class="form-group">
+                                                    <label>Numéro d'Identification Fiscale (NIF) : </label>
+                                                    <input type="number" class="form-control" id="A3A">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Centre Fiscal : </label>
+                                                    <input type="text" class="form-control" id="A3B">
+                                                </div>
+                                            </div>
+
+
+                                            <!--  -->
+                                            <div class="form-group">
+                                                <label>Type : </label>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="A7" data-description="Collecteur de pierres" class="radio_type" id="A7" value="1" checked>
+                                                        Collecteur de pierres
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="A7" data-description="Collecteur catégorie" class="radio_type" id="A7" value="2">
+                                                        Collecteur catégorie
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="A7" data-description="Collecteur catégorie" class="radio_type" id="A7" value="3">
+                                                        Collecteur catégorie
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="A7" data-description="Comptoir commercial" class="radio_type" id="A7" value="4">
+                                                        Comptoir commercial
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="A7" data-description="Comptoir de fonte" class="radio_type" id="A7" value="5">
+                                                        Comptoir de fonte
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label>
+                                                        <input type="radio" name="A7" data-description="Autre" class="radio_type" id="A7" value="6">
+                                                        Autre
+                                                    </label>
+                                                </div>
+                                                <div class="form-group" id="type_autre">
+                                                    <label>Préciser</label>
+                                                    <input type="text" class="form-control" name="type_autre" id="A7AUTRES">
+                                                </div>
+                                            </div>
+                                            <!--  -->
+                                            <div class="form-group">
+                                                <label>Type de produit : </label>
+                                                <?php echo $this->productBox ?>
+                                            </div>
+                                            <!--  -->
+											<div class="form-group">
+                                                <label>Revenus : </label>
+                                                <input type="number" class="form-control" id="C9">
+                                            </div>
+                                        </div>                  
+                                        <div class="col-md-6">
+											<div id="cat1">
+												<div class="form-group">
+													PIERRES PRECIEUSES
+												</div>
+												<div class="form-group">
+													<label>Totalité achat pierres précieuses (en grammes) : </label>
+													<input type="number" class="form-control" id="C7A">
+												</div>
+												<div class="form-group">
+													<label>Prix d'achat pierres précieuses : </label>
+													<input type="number" class="form-control" id="C8A">
+												</div>
+												<div class="form-group">
+													<label>Prix de vente pierres précieuses : </label>
+													<input type="number" class="form-control" id="C10A">
+												</div>
+                                            </div>
+											<div id="cat2">
+												<div class="form-group">
+													PIERRES FINES
+												</div>
+												<div class="form-group">
+													<label>Totalité achat pierres fines (en grammes) : </label>
+													<input type="number" class="form-control" id="C7B">
+												</div>
+												<div class="form-group">
+													<label>Prix d'achat pierres fines : </label>
+													<input type="number" class="form-control" id="C8B">
+												</div>
+												<div class="form-group">
+													<label>Prix de vente pierres fines : </label>
+													<input type="number" class="form-control" id="C10B">
+												</div>
+                                            </div>
+											<div id="cat3">
+												<div class="form-group">
+													PIERRES INDUSTRIELLES
+												</div>
+												<div class="form-group">
+													<label>Totalité achat pierres précieuses (en kilos) : </label>
+													<input type="number" class="form-control" id="C7C">
+												</div>
+												<div class="form-group">
+													<label>Prix d'achat pierres précieuses : </label>
+													<input type="number" class="form-control" id="C8C">
+												</div>
+												<div class="form-group">
+													<label>Prix de vente pierres précieuses : </label>
+													<input type="number" class="form-control" id="C10C">
+												</div>
+                                            </div>
+											<div id="cat4">
+												<div class="form-group">
+													METAUX PRECIEUX
+												</div>
+												<div class="form-group">
+													<label>Totalité achat métaux précieux (en grammes) : </label>
+													<input type="number" class="form-control" id="C7D">
+												</div>
+												<div class="form-group">
+													<label>Prix d'achat métaux précieux : </label>
+													<input type="number" class="form-control" id="C8D">
+												</div>
+												<div class="form-group">
+													<label>Prix de vente métaux précieux : </label>
+													<input type="number" class="form-control" id="C10D">
+												</div>
+                                            </div>
+                                            
+                                        </div>
+										<div id="retour_ajax"></div>
+										
+                                                        <button class="btn btn-success btn-flat" onclick="save_comptable()" >Enregistrer</button>
+                                                    
+                                        <!--button type="button" class="btn btn-success btn-flat btn-block" id="valide_btn" onclick="save_enquete()">Valider</button-->
+                                    </div>                
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div id="form_comptabilite_finance">                   
+                        <div  class="col-md-12">
+                            <div class="panel panel-success ">
+                                <div class="panel-heading">COMPTABLE & FINANCE</div>
+                                <div class="panel-body" style="background-color: #ddd;">
+                                    <div id="form_comptable">
+                                        <div class="col-md-12" >
+                                            <!-- BEGIN IS -->
+                                            <div class="form-group">
+                                                <label>IS : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D1" id="D1" onchange="valide_d1(this.value)" value="1" >Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D1" id="D1" onchange="valide_d1(this.value)" value="2" checked>Non
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="div_d1_montant">
+                                                <label>Montant</label>
+                                                <input type="number" class="form-control" name="D1A" id="D1A">
+                                            </div>
+                                            <div class="form-group" id="div_d1_date">
+                                                <label>Date de paiement</label>
+                                                <input type="text" class="form-control" name="D1B" id="D1B">
+                                            </div>
+                                            <hr>
+
+                                            <!-- BEGIN FRAIS D'ADMINISTRATION MINIER -->
+                                            <div class="form-group">
+                                                <label>Frais d'administration minier : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D2" id="D2" onchange="valide_d2(this.value)" value="1">Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D2" id="D2" onchange="valide_d2(this.value)" value="2" checked="true">Non
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="D2_montant">
+                                                <label>Montant</label>
+                                                <input type="number" class="form-control" name="D2A" id="D2A">
+                                            </div>
+                                            <div class="form-group" id="D2_date">
+                                                <label>Date de paiement</label>
+                                                <input type="text" class="form-control" name="D2B" id="D2B">
+                                            </div>
+                                            <div class="form-group" id="D2_lieu">
+                                                <label>Lieu</label>
+                                                <input type="ttext" name="D2C" class="form-control" id="D2C">
+                                            </div>
+                                            <hr>
+
+                                            <!-- BEGIN DOA -->
+                                            <div class="form-group">
+                                                <label>Droit de délivrance des cartes : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D3" id="D3" onchange="valide_d3(this.value)"  value="1">Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D3" id="D3" onchange="valide_d3(this.value)"  value="2" checked="true">Non
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="D3_montant">
+                                                <label>Montant</label>
+                                                <input type="number" class="form-control" name="D3A" id="D3A">
+                                            </div>
+                                            <div class="form-group" id="D3_date">
+                                                <label>Date de paiement</label>
+                                                <input type="text" class="form-control" name="D3B" id="D3B">
+                                            </div>
+                                            <div class="form-group" id="D3_lieu">
+                                                <label>Lieu</label>
+                                                <input type="text" class="form-control" name="D3C" id="D3C">
+                                            </div>
+                                            <hr>
+
+                                            <!-- BEGIN DROIT DE DELIVRANCE D'AGREEMENT -->
+                                            <div class="form-group">
+                                                <label>Droit d'octroi d'agréement : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D4" id="D4" onchange="valide_d4(this.value)" value="1">Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D4" id="D4" onchange="valide_d4(this.value)" value="2" checked>Non
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="D4_montant">
+                                                <label>Montant</label>
+                                                <input type="number" class="form-control" name="D4A" id="D4A">
+                                            </div>
+                                            <div class="form-group" id="D4_date">
+                                                <label>Date de paiement</label>
+                                                <input type="text" class="form-control" name="D4B" id="D4B">
+                                            </div>
+                                            <div class="form-group" id="D4_lieu">
+                                                <label>Lieu</label>
+                                                <input type="text" class="form-control" name="D4C" id="D4C">
+                                            </div>
+                                            <hr>
+
+                                            <!-- BEGIN REDEVANCE COLLECTEURS -->
+                                            <div class="form-group">
+                                                <label>Redevances des collecteurs : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D5" id="D5" onchange="valide_d5(this.value)" value="1">Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D5" id="D5" onchange="valide_d5(this.value)" value="2" checked>Non
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="D5_montant">
+                                                <label>Montant</label>
+                                                <input type="number" class="form-control" name="D5A" id="D5A">
+                                            </div>
+                                            <div class="form-group" id="D5_date">
+                                                <label>Date de paiement</label>
+                                                <input type="text" class="form-control" name="D5B" id="D5B">
+                                            </div>
+                                            <div class="form-group" id="D5_lieu">
+                                                <label>Lieu</label>
+                                                <input type="text" class="form-control" name="D5C" id="D5C">
+                                            </div>
+                                            <hr>
+                                            <!-- BEGIN D6 -->
+                                            <div class="form-group">
+                                                <label>D6 : </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D6" id="D6" onchange="valide_d6(this.value)" value="1">Oui
+                                                </label>
+                                                <label class="radio-inline">
+                                                    <input type="radio"  name="D6" id="D6" onchange="valide_d6(this.value)" value="2" checked>Non
+                                                </label>
+                                            </div>
+                                            <div class="form-group" id="D6_montant">
+                                                <label>Montant</label>
+                                                <input type="number" class="form-control" name="D6A" id="D6A">
+                                            </div>
+                                            <div class="form-group" id="D6_date">
+                                                <label>Date de paiement</label>
+                                                <input type="text" class="form-control" name="D6B" id="D6B">
+                                            </div>
+                                            <div class="form-group" id="D6_lieu">
+                                                <label>Lieu</label>
+                                                <input type="text" class="form-control" name="D6C" id="D6C">
+                                            </div>
+                                            <hr>
+
+                                            <!-- BEGIN Autre -->
+                                            <div class="form-group">
+                                                <label>Autres</label>
+                                                <input type="text" class="form-control" name="D8" id="D7">
+                                            </div>
+                                            <nav aria-label="navigation">
+                                                <ul class="pager">
+                                                    <li class="previous disabled">
+                                                        <button class="btn btn-warning btn-flat" onclick="back_enquete()">Retour</button>
+                                                    </li>
+                                                    <li class="next">
+                                                        <button class="btn btn-success btn-flat" onclick="save_comptable()" >Enregistrer</button>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="close_form()" data-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+    $("#div_d1_montant").hide();
+    $("#div_d1_date").hide();
+
+    $('#D1B').datetimepicker();
+    $('#D2B').datetimepicker();
+    $('#D3B').datetimepicker();
+    $('#D4B').datetimepicker();
+    $('#D5B').datetimepicker();
+    $('#D6B').datetimepicker();
+
+    for (var i = 2 ; i <= 6 ; i++) {
+        
+        $("#D" + i + "_montant").hide();
+        $("#D" + i + "_lieu").hide();
+        $("#D" + i + "_date").hide();
+
+    }
+
+
+    $("#confirm_comptable").hide();
+    $( "input[type=radio]" ).checkboxradio({icon: false});
+    $( "input[type=checkbox]" ).checkboxradio({icon: false});
+
+    for (var i = 1 ; i < 8 ; i++) {
+        $( "#D" + i + "" ).checkboxradio({icon: false});
+    }
+
+    function valide_d1(val)
+    {
+        if(val == 1)
+        {
+            $("#div_d1_montant").show();
+            $("#div_d1_date").show();
+        }
+        if(val == 2)
+        {
+            $("#div_d1_montant").hide();
+            $("#div_d1_date").hide();
+        }
+    }
+
+    /**************************************/
+
+    $("#D2_montant").hide();
+    $("#D2_lieu").hide();
+    $("#D2_date").hide();
+
+
+    function valide_d2(val)
+    {
+
+        if(val == 1)
+        {
+            $("#D2_montant").show();
+            $("#D2_lieu").show();
+            $("#D2_date").show();
+        }
+        if(val == 2)
+        {
+            $("#D2_montant").hide();
+            $("#D2_lieu").hide();
+            $("#D2_date").hide();
+        }
+    }
+
+    /**************************************/
+
+    $("#D3_montant").hide();
+    $("#D3_date").hide();
+    $("#D3_lieu").hide();
+
+
+    function valide_d3(val)
+    {
+
+        if(val == 1)
+        {
+            $("#D3_montant").show();
+            $("#D3_date").show();
+            $("#D3_lieu").show();
+        }
+        if(val == 2)
+        {
+            $("#D3_montant").hide();
+            $("#D3_date").hide();
+            $("#D3_lieu").hide();
+        }
+    }
+
+    /**************************************/
+
+    $("#D4_montant").hide();
+    $("#D4_date").hide();
+    $("#D4_lieu").hide();
+
+
+    function valide_d4(val)
+    {
+
+        if(val == 1)
+        {
+            $("#D4_montant").show();
+            $("#D4_date").show();
+            $("#D4_lieu").show();
+        }
+        if(val == 2)
+        {
+            $("#D4_montant").hide();
+            $("#D4_date").hide();
+            $("#D4_lieu").hide();
+        }
+    }
+
+    /**************************************/
+
+    $("#D5_montant").hide();
+    $("#D5_date").hide();
+    $("#D5_lieu").hide();
+
+
+    function valide_d5(val)
+    {
+
+        if(val == 1)
+        {
+            $("#D5_montant").show();
+            $("#D5_date").show();
+            $("#D5_lieu").show();
+        }
+        if(val == 2)
+        {
+            $("#D5_montant").hide();
+            $("#D5_date").hide();
+            $("#D5_lieu").hide();
+        }
+    }
+
+    /**************************************/
+
+    $("#D6_montant").hide();
+    $("#D6_date").hide();
+    $("#D6_lieu").hide();
+
+    function valide_d6(val)
+    {
+
+        if(val == 1)
+        {
+            $("#D6_montant").show();
+            $("#D6_date").show();
+            $("#D6_lieu").show();
+        }
+        if(val == 2)
+        {
+            $("#D6_montant").hide();
+            $("#D6_date").hide();
+            $("#D6_lieu").hide();
+        }
+    }
+
+    function security_form_comptable()
+    {
+        $valide = false;
+        $valideD1 = true;
+        $valide_array = {};
+
+        for (var i =  2 ; i <= 6 ; i++) {
+            $valide_array[i] = true;
+        }
+
+        $("#D1A").css('border-color',"#d2d6de");
+        $("#D1B").css('border-color',"#d2d6de");
+
+        for (var i =  2 ; i <= 6 ; i++)
+        {
+            $("#D" + i + "A").css('border-color',"#d2d6de");
+            $("#D" + i + "B").css('border-color',"#d2d6de");
+            $("#D" + i + "C").css('border-color',"#d2d6de");
+        }
+
+        $("#D7").css('border-color',"#d2d6de");
+
+        if($('input[name=D1]:radio:checked').val() == 1)
+        {
+            if($("#D1A").val() == "" || $("#D1B").val() == "")
+            {
+                $valideD1 = false;
+                $("#D1A").css('border-color',"red");
+                $("#D1B").css('border-color',"red");
+            }else{
+                $valideD1 = true;
+            }
+        }
+
+        for (var i =  2 ; i <= 6 ; i++)
+        {
+            if($('input[name=D' + i + ']:radio:checked').val() == 1)
+            {
+                if($("#D" + i + "A").val() == "" || $("#D" + i + "B").val() == "" || $("#D" + i + "C").val() == "")
+                {   
+                    $valide_array[i] = false;
+                    $("#D" + i + "A").css('border-color',"red");
+                    $("#D" + i + "B").css('border-color',"red");
+                    $("#D" + i + "C").css('border-color',"red");
+                }else{
+                    $valide_array[i] = true;
+                }
+            }
+        }
+
+        if($valideD1 && $valide_array[2] && $valide_array[3] && $valide_array[4] && $valide_array[5] && $valide_array[6])
+        {
+            $valide = true;
+        }
+
+        return $valide;        
+    }
+
+    function confirm_comptable()
+    {
+        if(security_form_comptable())
+        {
+            if($('input[name=D1]:radio:checked').val() == 1)
+            {
+                $("#span_D1").html('');
+                $("#span_D1").html("Montant : <b> " + $("#D1A").val() + "</b></br> Date : <b>" + $("#D1B").val() + "</b>");
+            }else{
+                $("#span_D1").html('');
+                $("#span_D1").html('Non');
+            }
+
+            for (var i = 2; i <= 6; i++) {
+                if($('input[name=D' + i + ']:radio:checked').val() == 1)
+                {
+                    $("#span_D" + i + "").html('');
+                    $("#span_D" + i + "").html("Montant : <b> " + $("#D" + i + "A").val() + "</b></br> Date : <b>" + $("#D" + i + "B").val() + "</b><br> Lieu : <b>" + $("#D" + i + "C").val() + "</b>");
+                }else{
+                    $("#span_D").html('');
+                    $("#span_D" + i + "").html('Non');
+                }
+            } 
+
+            $("#span_D7").html(''); 
+            $("#span_D7").html($("#D7").val()); 
+
+            $("#form_comptable").hide();
+            $("#confirm_comptable").show();
+
+        }else{
+            alert("Vérifier votre formulaire.");
+        }
+    }
+
+    function back_form_enquete()
+    {
+        $("#form_html").show();
+        $("#form_confirm").hide();
+    }
+
+    function back_form_comptable()
+    {
+        $("#form_comptable").show();
+        $("#confirm_comptable").hide();
+    }
+</script>
+
+<script type="text/javascript">
+    
+    $("#hideCarteCollecteur").hide();
+    $("#hideCarteStat").hide();
+    $("#hideCarteFiscal").hide();
+
+    $("#form_html").show();
+    $("#form_confirm").hide();
+
+    $("#type_autre").hide();
+
+    // $("#save_btn").hide();
+    $("#back_btn").hide();
+
+    $product = "";
+    $product_selected = {};
+
+    $(".radio_type").click(function(){
+        if($('.radio_type:checked').val() == 6)
+        {
+            $("#type_autre").show();
+        }else{
+            $("#type_autre").hide();
+        }
+    })
+
+    function valide_carte_col(val)
+    {
+
+        if(val == 1)
+        {
+            $("#hideCarteCollecteur").show();
+        }
+        if(val == 0)
+        {
+            $("#hideCarteCollecteur").hide();
+        }
+    }
+
+    function valide_stat(val)
+    {
+        if(val == 1)
+        {
+            $("#hideCarteStat").show();
+        }
+        if(val == 0)
+        {
+            $("#hideCarteStat").hide();
+        }
+    }
+
+    function valide_fiscal(val)
+    {
+        if(val == 1)
+        {
+            $("#hideCarteFiscal").show();
+        }
+        if(val == 0)
+        {
+            $("#hideCarteFiscal").hide();
+        }
+    }
+
+    function selected_product(val)
+    {
+        $product = "";
+        if(!$product_selected.hasOwnProperty(val))
+        {
+            $product_selected[val] = val;
+        }else{
+            delete $product_selected[val];  
+        }
+        $.each($product_selected, function(key, value) {
+              $product += value + " ";
+        });
+    }
+
+    function retour_form()
+    {
+
+        $("#close_btn").show();
+        $("#valide_btn").show();
+        $("#save_btn").hide();
+        $("#back_btn").hide();
+
+        $("#form_html").show();
+        $("#form_confirm").hide();
+    }
+
+
+    function security_form()
+    {
+        $valide = false;
+        // $("#C1A").css('border-color',"#d2d6de");
+        // $("#C1B").css('border-color',"#d2d6de");
+        // $("#C2A").css('border-color',"#d2d6de");
+        // $("#C3A").css('border-color',"#d2d6de");
+        // $("#C3B").css('border-color',"#d2d6de");
+        // $(".box_product").css('background',"#d2d6de");
+
+        // $("#total_achat").css('border-color',"#d2d6de");
+        // $("#px_achat_min").css('border-color',"#d2d6de");
+        // $("#px_achat_max").css('border-color',"#d2d6de");
+        // $("#revenu").css('border-color',"#d2d6de");
+        // $("#px_vente_min").css('border-color',"#d2d6de");
+        // $("#px_vente_max").css('border-color',"#d2d6de");
+
+
+        // if($("#C1").val() == "1")
+        // {
+            // if($("#C3A").val() == "" || $("#C3B").val() == "")
+            // {
+                // $valide = false;
+                // if($("#C1A").val() == "")
+                // {
+                    // $("#C1A").css('border-color',"red");
+                // }
+                // if($("#C1B").val() == "")
+                // {
+                    // $("#C1B").css('border-color',"red");
+                // }
+            // }else{
+                // $valide = true;
+            // }
+            
+        // }
+
+        // if($("#C2").val() == "1")
+        // {
+            // if($("#C2A").val() == "")
+            // {
+                // $valide = false;
+                // $("#C2A").css('border-color',"red");
+            // }else{
+                // $valide = true;
+            // }
+        // }
+
+        // if($("#C3").val() == "1")
+        // {
+            // if($("#C3A").val() == "" || $("#C3B").val() == "")
+            // {
+                // $valide = false;
+                // if($("#C3A").val() == "")
+                // {
+                    // $("#C3A").css('border-color',"red");
+                // }
+                // if($("#C3B").val() == "")
+                // {
+                    // $("#C3B").css('border-color',"red");
+                // }
+            // }else{
+                // $valide = true;
+            // }
+            
+        // }
+
+        // /******************************************/
+
+        
+
+        // /******************************************/
+
+        // if($("#total_achat").val() == "" || $("#px_achat_min").val() == "" || $("#px_achat_max").val() == "" || $("#revenu").val() == "" ||
+            // $("#px_vente_min").val() == "" || $("#px_vente_max").val() == "" || jQuery.isEmptyObject($product_selected) )
+        // {
+            // if(jQuery.isEmptyObject($product_selected))
+            // {
+                // $(".box_product").css('background',"red !important");
+            // }
+            // if($("#total_achat").val() == "")
+            // {
+                // $("#total_achat").css('border-color',"red");
+            // }
+            // if($("#px_achat_min").val() == "")
+            // {
+                // $("#px_achat_min").css('border-color',"red");
+            // }
+            // if($("#px_achat_max").val() == "")
+            // {
+                // $("#px_achat_max").css('border-color',"red");
+            // }
+            if($("#revenu").val() == "")
+            {
+                $("#revenu").css('border-color',"red");
+            }
+            // if($("#px_vente_min").val() == "")
+            // {
+                // $("#px_vente_min").css('border-color',"red");
+            // }
+            // if($("#px_vente_max").val() == "")
+            // {
+                // $("#px_vente_max").css('border-color',"red");
+            // }
+        // }else{
+            // $valide = true;
+        // }
+
+        return $valide;
+    }
+
+    function valide_form()
+    {
+        if(security_form())
+        {
+            $("#close_btn").hide();
+            // $("#valide_btn").hide();
+
+            $("#save_btn").show();
+            $("#back_btn").show();
+
+            $("#form_html").hide();
+            $("#form_confirm").show();
+
+            console.log($("#C1").val() );
+
+            if($("input[name=enqueteValide]:checked").val() == 2)
+            {
+                $("#td_carte_collecteur").html("");
+                $("#td_carte_collecteur").html(" Non ");
+            }else{
+                $("#td_carte_collecteur").html("");
+                $("#td_carte_collecteur").html(
+                    '<b>Numero carte collecteur : </b>' + $("#C1A").val() + '<br>' +
+                    '<b>Lieu de délivrance : </b>' + $("#C1B").val()
+                );
+            }
+
+            
+            if($("input[name=C2]:checked").val() == 2)
+            {
+                $("#td_carte_stat").html("");
+                $("#td_carte_stat").html(" Non ");
+            }else{
+                $("#td_carte_stat").html("");
+                $("#td_carte_stat").html(
+                    '<b>Numéro carte statistique : </b>' + $("#C2A").val()
+                );
+            }
+
+            if($("input[name=C3]:checked").val() == 2)
+            {
+                $("#td_carte_fiscal").html("");
+                $("#td_carte_fiscal").html(" Non ");
+            }else{
+                $("#td_carte_fiscal").html("");
+                $("#td_carte_fiscal").html(
+                    '<b>Numéro d\'Identification Fiscale (NIF) : </b>' + $("#C3A").val() + '<br>' +
+                    '<b>Centre Fiscal :  </b>' + $("#C3B").val()
+                );
+            }
+
+            
+            if($("input[name=radio_type]:checked").val() == 6)
+            {
+                $("#td_type").html("");
+                $("#td_type").html($("input[name=type_autre]").val());
+            }else{
+                $("#td_type").html("");
+                $("#td_type").html($("input[name=radio_type]:checked").data('description'));
+            }
+            
+
+            $("#td_produit").html("");
+            $("#td_produit").html($product);
+
+            $("#td_total_achat").html("");
+            $("#td_total_achat").html($("#total_achat").val());
+
+            $("#td_achat_min").html("");
+            $("#td_achat_min").html($("#px_achat_min").val());
+
+            $("#td_achat_max").html("");
+            $("#td_achat_max").html($("#px_achat_max").val());
+
+            $("#td_revenu").html("");
+            $("#td_revenu").html($("#revenu").val());
+
+            $("#td_vente_min").html("");
+            $("#td_vente_min").html($("#px_vente_min").val());
+
+            $("#td_vente_max").html("");
+            $("#td_vente_max").html($("#px_vente_max").val());
+
+            $("#form_confirm").show();
+
+        }else{
+            alert("Vérifier votre formulaire.");
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    $("#form_comptabilite_finance").hide();
+
+    function save_enquete()
+    {
+        
+            $("#form_enquete").hide();
+            $("#form_comptabilite_finance").show();
+        
+    }
+
+    function back_enquete()
+    {
+        $("#form_enquete").show();
+        $("#form_comptabilite_finance").hide();
+    }
+
+    function clean_form()
+    {
+        $("#hideCarteCollecteur").hide();
+        $("#hideCarteStat").hide();
+        $("#hideCarteFiscal").hide();
+
+        $("#div_d1_montant").hide();
+        $("#div_d1_date").hide();
+
+        $("#total_achat").val("");
+        $("#px_achat_min").val("");
+        $("#px_achat_max").val("");
+        $("#px_vente_min").val("");
+        $("#revenu").val(""),
+        $("#px_vente_max").val("");
+        $("#type_autre").val("");
+        $("#C1A").val("");
+        $("#C1B").val("");
+        $("#C2A").val("");
+        $("#C3A").val("");
+        $("#C3B").val("");
+        $("#autre_type").val("");
+        $("#D1A").val("");
+        $("#D1B").val("");
+
+        for (var i = 2 ; i <= 6; i++) {
+            $("#C"+i+"A").val("");
+            $("#C"+i+"B").val("");
+            $("#C"+i+"C").val("");
+
+            $("#D"+i+"_montant").hide();
+            $("#D"+i+"_lieu").hide();
+            $("#D"+i+"_date").hide();
+        }
+
+        $("#D7").val("");
+    }
+
+    function back_to_begin()
+    {
+        $("#form_html").show();
+        $("#form_comptabilite_finance").hide();
+        $("#confirm_comptable").hide();
+        $("#form_confirm").hide();
+    }
+
+    function close_form()
+    {
+        back_enquete();
+        clean_form();
+    }
+
+    function save_comptable()
+    {
+        $url = "CODEEXPL=<?php echo $_GET['code'] ?>&A1="+$("input[name='A1']:checked").val()+"&A1A="+$("#A1A").val()+"&A1B="+ $("#A1B").val() +"&A2="+$("input[name='A2']:checked").val()+"&A2A="+$("#A2A").val()+"&A3="+$("input[name='A3']:checked").val()+"&A3A="+$("#A3A").val()+"&A3B="+$("#A3B").val()+"&A7="+$("input[name='A7']:checked").val()+"&A7AUTRES="+$("#A7AUTRES").val()+"&C9="+$("#C9").val()+"&C7A="+$("#C7A").val()+"&C7B="+$("#C7B").val()+"&C7C="+$("#C7C").val()+"&C7D="+$("#C7D").val()+"&C8A="+$("#C8A").val()+"&C8B="+$("#C8B").val()+"&C8C="+$("#C8C").val()+"&C8D="+$("#C8D").val()+"&C10A="+$("#C10A").val()+"&C10B="+$("#C10B").val()+"&C10C="+$("#C10C").val()+"&C10D="+$("#C10D").val();
+            
+            
+            $("#ajaxEnvoie").html("");
+            $("#ajaxEnvoie").html("Enregistrerement...");
+            $.ajax({
+                    url : "savenewenquetecollector",
+                    method : "post",
+                    data : $url,
+                    success : function(ret){
+                        $("#ajaxEnvoie").html("");
+                        $("#ajaxEnvoie").html("Enregistré (tafiditra)");
+                        $("#retour_ajax").html("");
+                        $("#retour_ajax").html(ret);
+                        clean_form();
+                        location.reload();
+                    },
+                    error : function(err) {
+                        $("#ajaxEnvoie").html("");
+                        $("#ajaxEnvoie").html("Enregistrer");
+                        alert("Une erreur est survenue. Veuillez réesseyer.");
+                    }
+                })
+
+        
+    }
+</script>

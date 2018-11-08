@@ -1,0 +1,219 @@
+<section class="content-header">
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Observatoire</a></li>
+        <li class="active">Enregistrer un opérateur</li>
+      </ol>
+</section>
+<br>
+<hr>
+<div class="row">
+<div class="col-md-10">
+    <div class="box box-success box-solid">
+        <div class="box-header with-border">
+            <h3 class="box-title">Formulaire de saisie</h3>
+        </div>
+        <div class="box-body">
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Anarana (nom) :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="text" class="form-control" id="operator_name" />
+        	    </div>
+        	</div>  
+        	<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Lahy/Vavy (sexe) :</label>
+        	    <div class="col-sm-7">
+        	    	<select class="form-control" id="operator_sexe">
+        	    		<option value="1">Lahy (homme)</option>
+        	    		<option value="2">Vavy (femme)</option>
+        	    	</select>
+        	    </div>
+        	</div>
+        	<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Taona (age) :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="number" class="form-control" min="16" max="70" onkeyup="limit(this,3)" id="operator_age"/>
+        	    </div>
+        	</div>  
+        	<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Fonenana (adresse) :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="text" class="form-control" id="operator_adresse"/>
+        	    </div>
+        	</div>
+        	<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Kara-panondro (CIN) :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="number" class="form-control" onkeyup="limit(this,12)"  id="operator_cin" />
+        	    </div>
+        	</div>
+        	<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Toerana nanaovana ny kara-panondro (Lieu de délivrance CIN) :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="text" minlength="12" maxlength="12" class="form-control" id="operator_cin_lien"/>
+        	    </div>
+        	</div>
+        	<br>
+			<div class="form-group">
+        	    &nbsp;
+        	</div>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Asa atao (Type) :</label>
+        	    <div class="col-sm-7">
+        	    	<select class="form-control" id="operator_type">
+        	    		<option value="1">Mpitrandraka (exploitant)</option>
+        	    		<option value="2">Mpanangona (collecteur)</option>
+        	    	</select>
+        	    </div>
+        	</div>
+        	<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Laharan-ketra (NIF) - Tsy fenoina raha tsy misy :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="text" class="form-control" onkeyup="limit(this,10)"id="operator_NIF"/>
+        	    </div>
+        	</div>
+			<div class="form-group">
+        	    &nbsp;
+        	</div>
+			<br>
+			<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Fifandraisana na Finday (contact) :</label>
+        	    <div class="col-sm-7">
+        	    	<input type="text" class="form-control" id="operator_contact"/>
+        	    </div>
+        	</div>
+			<br>
+        	<div class="form-group">
+        	    <label for="inputEmail3" class="col-sm-4 control-label">Fokontany</label>
+        	    <div class="col-sm-7">
+        	    	<select class="form-control" id="fokontany_select">
+        	    		<?php foreach ($this->fokontany as $keyFokontany => $valueFokontany) : ?>
+        	    			<option value="<?php echo $valueFokontany['CODEFKT'] ?>"><?php echo $valueFokontany['NOMFKT'] ?></option>
+        	    		<?php endforeach ?>
+        	    	</select>
+        	    </div>
+        	</div>
+        	<br>
+			<div class="form-group">
+				<div class="col-sm-7">
+        	    <button type="button" class="btn btn-success btn-flat " onclick="sending_data()">Ampidirina (Valider)</button>
+				</div>
+        	</div>
+        	
+        </div>
+    </div>
+</div>
+</div>
+	  
+<script type="text/javascript">
+
+	function security_form()
+	{
+		$("#operator_name").css("border-color","#d2d6de");
+		$("#operator_age").css("border-color","#d2d6de");
+		$("#operator_adresse").css("border-color","#d2d6de");
+		$("#operator_cin").css("border-color","#d2d6de");
+		$("#operator_cin_lien").css("border-color","#d2d6de");
+		$("#operator_contact").css("border-color","#d2d6de");
+
+		$name = $("#operator_name").val();
+		$sexe = $("#operator_sexe").val();
+		$age = $("#operator_age").val();
+		$adresse = $("#operator_adresse").val();
+		$cin = $("#operator_cin").val();
+		$cin_lien = $("#operator_cin_lien").val();
+		$type = $("#operator_type").val();
+		$contact = $("#operator_contact").val();
+		$nif = $("#operator_NIF").val();
+		
+		$valide = false
+
+		if($name == "" || $sexe == "" || $age == "" || $adresse == "" || $cin == "" || $cin_lien == "" || $type == "" || $contact == "")
+		{
+			if($name == "")
+			{
+				$("#operator_name").css("border-color","red");
+			}
+			if($age == "")
+			{
+				$("#operator_age").css("border-color","red");
+			}
+			if($adresse == "")
+			{
+				$("#operator_adresse").css("border-color","red");
+			}
+			if($cin == "")
+			{
+				$("#operator_cin").css("border-color","red");
+			}
+			if($cin_lien == "")
+			{
+				$("#operator_cin_lien").css("border-color","red");
+			}
+			if($contact == "")
+			{
+				$("#operator_contact").css("border-color","red");
+			}
+		}else{
+			$valide = true;
+		}
+		return $valide;
+	}
+
+	function sending_data()
+	{
+		$name = $("#operator_name").val();
+		$sexe = $("#operator_sexe").val();
+		$age = $("#operator_age").val();
+		$adresse = $("#operator_adresse").val();
+		$cin = $("#operator_cin").val();
+		$cin_lien = $("#operator_cin_lien").val();
+		$type = $("#operator_type").val();
+		$contact = $("#operator_contact").val();
+		$fokontany = $("#fokontany_select").val();
+		$nif = $("#operator_NIF").val();
+
+		if(security_form())
+		{
+			if(confirm("Efa voamarina tsara daholo ve ireo rehetra ireo?"))
+			{
+				$.ajax({
+					url : "insertoperator",
+					type : "post",
+					data : "name="+$name+"&sexe="+$sexe+"&age="+$age+"&adresse="+$adresse+"&cin="+$cin+"&cin_lien="+$cin_lien+"&type="+$type+"&contact="+$contact+"&fkt="+$fokontany+"&nif="+$nif,
+					success : function($retour){
+
+						// $("#retour_ajax").html("");
+						// $("#retour_ajax").html($retour);
+						$("#operator_name").val("");
+						$("#operator_age").val("");
+						$("#operator_adresse").val("");
+						$("#operator_cin").val("");
+						$("#operator_cin_lien").val("");
+						$("#operator_contact").val("");
+						$("#operator_NIF").val("");
+
+					},
+					error : function($html){
+						alert('Une erreur est survenue. Veuillez reéssayer.')
+					}
+				})
+			}
+		}else{
+			alert("Veuillez vérifier votre formulaire.");
+		}
+	}
+	function limit(element, le)
+	{
+		if(element.value.length > le) {
+			element.value = element.value.substr(0, le);
+		}
+	}
+
+</script>
+

@@ -1,0 +1,127 @@
+<div class="col-md-10">
+
+    <div class="box box-success box-solid">
+
+        <div class="box-header with-border">
+
+            <h3 class="box-title">Gestion d'utilisateur</h3>
+
+        </div>
+
+        <div class="box-body">
+
+          <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">Nom :</label>
+
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="util_name" />
+
+              </div>
+
+          </div>
+           <br> 
+          <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">Prénom :</label>
+
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="util_lastname" />
+
+              </div>
+
+          </div> 
+           <br> 
+           
+          <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">Group :</label>
+
+              <div class="col-sm-10">
+
+                <select class="form-control" id="region" onchange="select_group()">
+
+                      <option value="" selected="true">----- GROUP -----</option>
+
+                      <?php foreach ($this->group as $keyGroup => $valueGroup) : ?>
+
+                        <option value="<?php echo $valueGroup['CODEGROUP'] ?>"><?php echo $valueGroup['NOMGROUP'] ?></option>
+
+                      <?php endforeach ?>
+
+                    </select>
+
+              </div>
+
+          </div>
+
+          <br>
+          <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">Login :</label>
+
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="util_lastname" />
+
+              </div>
+
+          </div> 
+           <br> 
+           <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">Mots de passe :</label>
+
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="util_lastname" />
+
+              </div>
+
+          </div> 
+           <br> 
+           <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">E_Mail :</label>
+
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="util_lastname" />
+
+              </div>
+
+          </div> 
+           <br> 
+           <div class="form-group">
+
+              <label for="inputEmail3" class="col-sm-2 control-label">Tél :</label>
+
+              <div class="col-sm-10">
+
+                <input type="text" class="form-control" id="util_lastname" />
+
+              </div>
+
+          </div> 
+           <br> 
+           
+          <br>
+
+          <button type="button" class="btn  btn-flat " onclick="sending_data()">Valider</button>
+          <!--button type="button" class="btn  btn-flat " onclick="sending_data()">Mis à jour</button-->
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
